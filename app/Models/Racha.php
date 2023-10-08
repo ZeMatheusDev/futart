@@ -17,6 +17,7 @@ class Racha extends Model
         'hora_do_racha',
         'final_do_racha',
         'data_do_racha',
+        'racha_token',
         'usuario_id',
         'created_at',
         'updated_at',

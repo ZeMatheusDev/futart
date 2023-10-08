@@ -36,5 +36,19 @@
     Seu navegador não suporta o elemento de áudio.
 </audio>
 
+<div class="container">
+    @foreach ($jogadoresSeparados as $jogador)
+        <div class="detalhes">
+            <img src="../fotos/{{basename($jogador->foto)}}" alt="Sua Imagem"><br>
+            <p> {{$jogador->nome}} </p>
+            <p>Posição: {{$jogador->posicao}}</p>
+            <br>
+        <form action="" class="btn btn-success">Detalhes</form>
+
+        </div>
+    @endforeach
+</div>
+
+
 </body>
 </html>

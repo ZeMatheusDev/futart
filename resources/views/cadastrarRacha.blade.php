@@ -14,10 +14,11 @@
         @csrf
         <img class="foto-circular" src="../fotos/{{session()->all()['foto']}}" alt="Sua Imagem">
 
-        <button type="submit">Logout</button>
 
         <a href="/">Home</a>
         <a href="/listagem">Listagem de Rachas</a>
+        <button type="submit">Logout</button>
+
     </form></div>
 @endif
     @if(session('error'))

@@ -70,7 +70,7 @@
 .back{
     height: 538px;
     width: 960px;
-    margin: 150px auto;
+    margin: 60px auto;
     border-radius: 20px;
     text-align: center;
     background-image: url('../teste.jpg');
@@ -119,33 +119,8 @@ body {
     background-repeat: no-repeat; 
 }
 
-.container {
-    white-space: nowrap;
-    overflow-x: auto;
-}
-
-.detalhes {
-    display: inline-block;
-    text-align: center;
-    width: 300px;
-    height: 300px;
-    margin: 0 10px; /* Espaço horizontal entre as divs */
-    background-color: rgb(255, 255, 255, 0.7);
-    border-radius: 30%;
-}
-
-.detalhes p {
-    font-size: 19px;
-    font-family: Arial, Helvetica, sans-serif;
-}
-
-.detalhes img {
-    margin-top: 20px;
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    overflow: hidden;
-    align-self: flex-start; /* Alinha a foto no topo do contêiner */
+#linkConvite{
+    
 }
 
 #cadastro {

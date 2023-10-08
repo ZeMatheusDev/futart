@@ -17,6 +17,7 @@ class Conta extends Model
         'email',
         'vip',
         'posicao',
+        'conta_token',
         'foto',
         'created_at',
         'updated_at',

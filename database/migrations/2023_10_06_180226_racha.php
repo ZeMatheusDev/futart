@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-            Schema::create('racha', function (Blueprint $table) {
+        Schema::create('racha', function (Blueprint $table) {
             $table->id();
             $table->string('nome_do_racha');
             $table->string('descricao');
@@ -19,6 +19,7 @@ return new class extends Migration
             $table->time('hora_do_racha');
             $table->time('final_do_racha');
             $table->string('data_do_racha');
+            $table->string('racha_token')->unique();
             $table->foreignId('usuario_id')->constrained('conta')->onDelete('CASCADE');
             $table->timestamps();
         });
@@ -29,6 +30,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('racha');
+
     }
 };

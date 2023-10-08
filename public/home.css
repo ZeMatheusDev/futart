@@ -16,7 +16,11 @@
     justify-content: center; /* Centraliza horizontalmente */
     align-items: center; /* Centraliza verticalmente */
     height: 80px;
+}
+
+#header{
     background-color: rgba(199, 199, 199, 0.5);
+
 }
 
 #links a {
@@ -113,6 +117,15 @@ body {
     height: 50px;
     border-radius: 50%; /* Isso cria o efeito de círculo */
     overflow: hidden; /* Garante que a imagem não saia do círculo */
+}
+
+.notificacao {
+    width: 80px;
+    height: 50px;
+    border-radius: 50%; /* Isso cria o efeito de círculo */
+    overflow: hidden; /* Garante que a imagem não saia do círculo */
+    float: left; /* Faz a imagem flutuar para a esquerda */
+    margin-top: 10px;
 }
 
 #cadastro #descricao:focus {

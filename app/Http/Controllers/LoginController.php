@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use App\Models\Conta;
+use Illuminate\Support\Str;
 
 
 use Illuminate\Http\Request;
@@ -30,6 +31,8 @@ class LoginController extends Controller
             $user->senha = $request->senha;
             $user->posicao = $request->posicao;
             $user->nome = $request->nome;
+            $token = Str::random(32);
+            $user->conta_token = $token;
             $user->email = $request->email;
             if ($request->hasFile('foto')) {
                 $imagem = $request->file('foto');

@@ -15,15 +15,19 @@
     </div>
 @endif
 @if(session('logado') == true)
+<img class="notificacao" src="{{ asset('../icone_vazio-removebg-preview.png') }}" alt="Sua Imagem">
+<div id="header">
 <div id="links">
     <form style="display: inline;" action="{{ route('deslogar') }}" method="POST">
         @csrf
         <img class="foto-circular" src="{{ asset('fotos/' . session()->get('foto')) }}" alt="Sua Imagem">
-
-        <button type="submit">Logout</button>
     <a href="/cadastrar">Cadastrar Racha</a>
     <a href="/listagem">Listagem de Rachas</a>
+    <button type="submit">Logout</button>
+
     </form></div>
+</div>
+
 @endif
 
     <audio id="myAudio" controls>

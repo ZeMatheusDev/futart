@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('senha');
             $table->string('email')->unique();
             $table->string('foto');
+            $table->string('conta_token')->unique();
             $table->boolean('vip');
             $table->timestamps();
         });

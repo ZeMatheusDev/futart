@@ -11,9 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('conta_racha', function (Blueprint $table) {
+        Schema::create('convite', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('usuario_id')->constrained('conta')->onDelete('NO ACTION');
+            $table->foreignId('convidado_id')->constrained('conta')->onDelete('NO ACTION');
+            $table->foreignId('dono_id')->constrained('conta')->onDelete('NO ACTION');
             $table->foreignId('racha_id')->constrained('racha')->onDelete('NO ACTION');
             $table->timestamps();
         });
@@ -24,6 +25,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('conta_racha');
+        Schema::dropIfExists('convite');
+
     }
 };
