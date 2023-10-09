@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Racha;
 use App\Models\Conta_racha;
+use App\Models\Convite;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -10,7 +11,12 @@ use Illuminate\Support\Str;
 class RachaController extends Controller
 {
     public function cadastrar(){
-        return view('cadastrarRacha');
+        $notificacoes = DB::table('convite')
+        ->where('convidado_id', '=', session()->all()['id'])
+        ->join('conta', 'conta.id', '=', 'dono_id')
+        ->join('racha', 'racha.id', '=', 'racha_id')
+        ->get();
+        return view('cadastrarRacha')->with('notificacoes', $notificacoes);
     }
 
     public function aceitar(Request $request){
@@ -18,11 +24,17 @@ class RachaController extends Controller
         ->where('usuario_id', '=', $request->usuario_id)
         ->where('racha_id', '=', $request->racha_id)
         ->get();
+        $verificarConvite = DB::table('convite')
+        ->where('convidado_id', '=', session()->all()['id'])
+        ->get();
         if($verificacao->isEmpty() == true){
             $contaRacha = new Conta_racha();
             $contaRacha->usuario_id = session()->all()['id']; 
             $contaRacha->racha_id = $request->racha_id;
             $contaRacha->save();
+            if($verificarConvite->isEmpty() == false){
+                DB::table('convite')->where('convidado_id', '=', session()->all()['id'])->where('racha_id', '=', $request->racha_id)->delete();
+            }
             DB::table('racha')
             ->where('id', $request->racha_id)
             ->increment('quantidade', 1);
@@ -30,13 +42,61 @@ class RachaController extends Controller
             ->where('usuario_id', '=', session()->all()['id'])
             ->join('conta', 'conta.id', '=', 'usuario_id')
             ->get();
-
+            
             return view('/listagem')->with('listagem', $listagem);
         }
         else{
             return redirect()->back()->with('error', 'Você já está cadastrado nesse racha!');
         }
-        
+    }
+
+    public function recusarRacha(Request $request){
+        DB::table('convite')->where('convidado_id', '=', session()->all()['id'])->where('racha_id', '=', $request->racha_id)->delete();
+        $listagem = DB::table('racha')
+        ->where('usuario_id', '=', session()->all()['id'])
+        ->join('conta', 'conta.id', '=', 'usuario_id')
+        ->get();
+        return view('/listagem')->with('listagem', $listagem);
+
+    }
+
+    public function enviarConvite(Request $request){
+        $verificacao = DB::table('conta')
+        ->where('email', '=', $request->email)
+        ->get();
+        $verificarRachaDono = DB::table('racha')
+        ->where('racha_token', '=', $request->rachaToken)
+        ->join('conta', 'conta.id', '=', 'racha.usuario_id')
+        ->get();
+        if($verificarRachaDono[0]->email != $request->email){
+            if($verificacao->isEmpty() == false){
+                $verificarSolicitacoes = DB::table('convite')
+                ->where('convidado_id', '=', $verificacao[0]->id)
+                ->get();
+                if($verificarSolicitacoes->isEmpty()){
+                    $rachaId = DB::table('racha')
+                    ->where('racha_token', '=', $request->rachaToken)
+                    ->select('id', 'usuario_id')
+                    ->get();
+                    $convite = new Convite();
+                    $convite->racha_id = $rachaId[0]->id;
+                    $convite->dono_id = $rachaId[0]->usuario_id;
+                    $convite->convidado_id = $verificacao[0]->id;
+                    $convite->save();
+                    return redirect()->back()->with('success', 'Solicitação enviada com sucesso para o ' . $verificacao[0]->nome. '!');
+                }
+                else{
+                    return redirect()->back()->with('error', 'Esse usuário ja foi convidado para o racha!');
+                }
+            }
+            else{
+                return redirect()->back()->with('error', 'Email não encontrado no banco de dados!');
+            }
+        }
+        else{
+            return redirect()->back()->with('error', 'O dono do racha não pode ser convidado!');
+        }
+
     }
 
     public function telaInvite(Request $request, $racha_token)
@@ -111,12 +171,22 @@ class RachaController extends Controller
         ->join('racha', 'racha.id', '=', 'racha_id')
         ->join('conta', 'conta.id', '=', 'racha.usuario_id')
         ->get();
-        return view('listagem')->with('listagem', $listagem);
+        $notificacoes = DB::table('convite')
+        ->where('convidado_id', '=', session()->all()['id'])
+        ->join('conta', 'conta.id', '=', 'dono_id')
+        ->join('racha', 'racha.id', '=', 'racha_id')
+        ->get();
+        return view('listagem')->with(['listagem' => $listagem, 'notificacoes' => $notificacoes]);
     }
 
     public function listagemJogadores(Request $request){
         $jogadoresNoRacha = DB::table('conta_racha')
         ->where('racha_id', '=', $request->racha_id_secreto)
+        ->get();
+        $notificacoes = DB::table('convite')
+        ->where('convidado_id', '=', session()->all()['id'])
+        ->join('conta', 'conta.id', '=', 'dono_id')
+        ->join('racha', 'racha.id', '=', 'racha_id')
         ->get();
         foreach($jogadoresNoRacha as $jogador){
             $jogadorSolo = DB::table('conta')
@@ -125,6 +195,6 @@ class RachaController extends Controller
             $jogadoreSeparados[] = $jogadorSolo[0];
         }
 
-        return view('listagemJogadores')->with(['jogadoresSeparados' => $jogadoreSeparados]);
+        return view('listagemJogadores')->with(['jogadoresSeparados' => $jogadoreSeparados, 'notificacoes' => $notificacoes]);
     }
 }

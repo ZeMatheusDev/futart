@@ -11,7 +11,18 @@ use Illuminate\Http\Request;
 class LoginController extends Controller
 {
     public function home(){
+        if(session()->has('id')){
+            $notificacoes = DB::table('convite')
+            ->where('convidado_id', '=', session()->all()['id'])
+            ->join('conta', 'conta.id', '=', 'dono_id')
+            ->join('racha', 'racha.id', '=', 'racha_id')
+            ->get();
+        
+            return view('home')?->with('notificacoes', $notificacoes);
+        }
+        else{
             return view('home');
+        }
     }
 
     public function criarConta(){
@@ -90,7 +101,12 @@ class LoginController extends Controller
             session(['vip' => $verificacao[0]->vip]);
             session(['email' => $verificacao[0]->email]);
             session(['logado' => true]);
-            return view('logado')->with('success', 'Login feito com sucesso!');
+            $notificacoes = DB::table('convite')
+            ->where('convidado_id', '=', session()->all()['id'])
+            ->join('conta', 'conta.id', '=', 'dono_id')
+            ->join('racha', 'racha.id', '=', 'racha_id')
+            ->get();
+            return view('logado')->with(['success' => 'Login feito com sucesso!', 'notificacoes' => $notificacoes]);
         }
         else{
             return redirect()->back()->with('error', 'Erro, conta não encontrada!');

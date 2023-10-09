@@ -21,7 +21,9 @@ Route::middleware(['verificarAutenticacao'])->group(function () {
     Route::get('/cadastrar', [RachaController::class, 'cadastrar'])->name('cadastrar');
     Route::post('/aceitar', [RachaController::class, 'aceitar'])->name('aceitar');
     Route::post('/cadastrando', [RachaController::class, 'cadastrando'])->name('cadastrando');
+    Route::post('/enviarConvite', [RachaController::class, 'enviarConvite'])->name('enviarConvite');
     Route::get('/telaInvite/{racha_token}', [RachaController::class, 'telaInvite'])->name('telaInvite');
+    Route::post('/recusarRacha', [RachaController::class, 'recusarRacha'])->name('recusarRacha');
 });
 
 // Outras rotas públicas

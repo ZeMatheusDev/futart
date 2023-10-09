@@ -12,11 +12,99 @@
 }
 
 #links {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: flex; /* Use flexbox para centralizar vertical e horizontalmente */
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: center; /* Centraliza verticalmente */
+    margin: 0 auto;
     height: 80px;
+
+}
+
+.notificacao {
+    width: 80px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.notificacao-wrapper {
+    display: inline-block; /* Para manter a notificação e o menu na mesma linha */
+    margin-right: 10px; /* Espaçamento à direita */
+}
+
+.notificacao-menu {
+    display: none;
+    position: absolute;
+    left: 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+    .notificacao-menu hr {
+        margin-bottom: 0;
+    }
+
+.notificacao-menu button{
+    width: 150px;
+    height: 40px;
+    border: none;
+    background-color: white;
+    font-size: 14px;
+}
+
+.notificacao-menu button{
+    width: 200px;
+    margin-top: 5px;
+    border: none;
+}
+
+.notificacao-menu a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: #333;
+}
+
+.notificacao-cheia {
+    width: 60px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.notificacao-cheia-wrapper {
+    display: inline-block; /* Para manter a notificação e o menu na mesma linha */
+    margin-right: 10px; /* Espaçamento à direita */
+}
+
+.notificacao-cheia-menu {
+    display: none;
+    position: absolute;
+    left: 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.notificacao-cheia-menu a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: #333;
+}
+#header {
+    display: flex; /* Usando flexbox para alinhar na mesma linha */
+    justify-content: space-between; /* Alinhar os elementos à esquerda e à direita */
+    align-items: center; /* Centralizar verticalmente */
     background-color: rgba(199, 199, 199, 0.5);
+    padding: 10px 20px; /* Adicione um preenchimento para melhor espaçamento */
 }
 
 #links a {
@@ -131,7 +219,7 @@ body {
     height: 300px;
     margin: 0 10px; /* Espaço horizontal entre as divs */
     background-color: rgb(255, 255, 255, 0.7);
-    border-radius: 30%;
+    border-radius: 50%;
 }
 
 .detalhes p {

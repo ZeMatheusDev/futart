@@ -9,6 +9,37 @@
 <body>
 <audio id="meuAudio" src="../gol.mp3" style="display: none"></audio>
 @if(session('logado') == true)
+<div id="header">
+    <div class="notificacao-wrapper">
+        @if ($notificacoes->isEmpty() == true)
+            
+        <img class="notificacao" src="{{ asset('../icone_vazio-removebg-preview.png') }}" alt="Sua Imagem">
+        <div class="notificacao-menu">
+            <a>Nenhuma solicitação</a>           
+        </div>
+        @endif
+    </div>
+    @if ($notificacoes->isEmpty() == false)
+            
+        <img class="notificacao-cheia" src="{{ asset('../icone_cheio-removebg-preview.png') }}" alt="Sua Imagem">
+        <div class="notificacao-menu">
+            @php
+            $contador = 1;
+            @endphp
+            @foreach ($notificacoes as $notificacao)
+                <form action="{{asset('../telaInvite/'.$notificacao->racha_token)}}" method="HEAD">
+                    @csrf
+                    <input type="hidden" id="racha_token" name="racha_token" value="{{$notificacao->racha_token}}">
+                    <button type="submit">{{$contador}} - convite feito por {{$notificacao->nome}}</button>
+                </form>
+                <hr> <!-- Adiciona um traço entre os botões -->
+                @php
+                $contador++;
+                @endphp
+            @endforeach          
+        </div>
+        @endif
+
 <div id="links">
     <form style="display: inline;" action="{{ route('deslogar') }}" method="POST">
         @csrf
@@ -20,6 +51,7 @@
         <a href="/cadastrar">Cadastrar Racha</a>
         <button type="submit">Logout</button>
     </form></div>
+</div>
 @endif
     @if(session('error'))
     <div style="text-align: center" class="alert alert-danger">
@@ -49,6 +81,28 @@
     @endforeach
 </div>
 
-
+<script>
+            document.addEventListener('DOMContentLoaded', function () {
+            var notificacaoWrapper = document.querySelector('.notificacao-wrapper');
+            var notificacaoMenu = document.querySelector('.notificacao-menu');
+    
+            notificacaoWrapper.addEventListener('click', function (event) {
+                event.stopPropagation(); // Impede que o evento se propague para outros elementos
+    
+                if (notificacaoMenu.style.display === 'block') {
+                    notificacaoMenu.style.display = 'none';
+                } else {
+                    notificacaoMenu.style.display = 'block';
+                }
+            });
+    
+            // Fechar o menu se clicar em qualquer lugar fora dele
+            document.addEventListener('click', function (event) {
+                if (event.target !== notificacaoWrapper && event.target !== notificacaoMenu) {
+                    notificacaoMenu.style.display = 'none';
+                }
+            });
+        });
+</script>
 </body>
 </html>

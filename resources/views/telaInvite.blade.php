@@ -20,6 +20,8 @@
         <img class="foto-circular" src="{{ asset('fotos/' . session()->get('foto')) }}" alt="Sua Imagem">
 
         <button type="submit">Logout</button>
+        <a href="/">Home</a>
+
     <a href="/cadastrar">Cadastrar Racha</a>
     <a href="/listagem">Listagem de Rachas</a>
     </form></div>
@@ -48,7 +50,10 @@
         <input type="hidden" name="usuario_id" id="usuario_id" value="{{session()->all()['id']}}">
         <button class="btn btn-primary" style="display: inline-block;">Aceitar</button>
         </form>
-        <form action="" style="display: inline">
+        <form action="{{asset('../recusarRacha')}}" style="display: inline" method="POST">
+        @csrf
+        <input type="hidden" name="racha_id" id="racha_id" value="{{$dados['racha']->id}} ">
+        <input type="hidden" name="usuario_id" id="usuario_id" value="{{session()->all()['id']}}">
         <button class="btn btn-danger" style="display: inline-block;">Recusar</button>
         </form>
     </div>

@@ -9,6 +9,37 @@
 <body>
 <audio id="meuAudio" src="../gol.mp3" style="display: none"></audio>
 @if(session('logado') == true)
+<div id="header">
+    <div class="notificacao-wrapper">
+        @if ($notificacoes->isEmpty() == true)
+            
+        <img class="notificacao" src="{{ asset('../icone_vazio-removebg-preview.png') }}" alt="Sua Imagem">
+        <div class="notificacao-menu">
+            <a>Nenhuma solicitação</a>           
+        </div>
+        @endif
+    </div>
+    @if ($notificacoes->isEmpty() == false)
+            
+        <img class="notificacao-cheia" src="{{ asset('../icone_cheio-removebg-preview.png') }}" alt="Sua Imagem">
+        <div class="notificacao-menu">
+            @php
+            $contador = 1;
+            @endphp
+            @foreach ($notificacoes as $notificacao)
+                <form action="{{asset('../telaInvite/'.$notificacao->racha_token)}}" method="HEAD">
+                    @csrf
+                    <input type="hidden" id="racha_token" name="racha_token" value="{{$notificacao->racha_token}}">
+                    <button type="submit">{{$contador}} - convite feito por {{$notificacao->nome}}</button>
+                </form>
+                <hr> <!-- Adiciona um traço entre os botões -->
+                @php
+                $contador++;
+                @endphp
+            @endforeach          
+        </div>
+        @endif
+</div>
 <div id="links">
     <form style="display: inline;" action="{{ route('deslogar') }}" method="POST">
         @csrf
@@ -45,10 +76,18 @@
         <form action="{{asset('/listagemJogadores')}}" method="POST">
         @csrf
         <input type="hidden" name="racha_id_secreto" id="racha_id_secreto" value="{{$list->racha_id}}">
-        <button id="listagemJogadores" type="submit">Lista dos jogadores do racha</button> <br><br>
+        <button id="listagemJogadores" type="submit">Lista dos jogadores do racha</button>
         </form>
         @if ($list->usuario_id == session()->all()['id']) 
-        <button id="linkConvite" class="btn btn-primary">Criar link de convite para o racha</button>
+        <button id="linkConvite">Criar link de convite para o racha</button>
+        <form action="{{asset('/enviarConvite')}}" method="POST">
+            @csrf
+        <div id="envio">
+            <input type="hidden" id="rachaToken" name="rachaToken" value='{{$list->racha_token}}'>
+            Enviar solicitação por email: <input id="email" name="email" type="email" required>
+        </div>
+        <button class="btn btn-success">Enviar solicitação</button>
+        </form>
         @endif
 </div>
 @endforeach
@@ -76,6 +115,29 @@
             // Feedback opcional
             alert('O link de convite para o racha foi copiado com sucesso!');
         });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    var notificacaoWrapper = document.querySelector('.notificacao-wrapper');
+    var notificacaoMenu = document.querySelector('.notificacao-menu');
+
+    notificacaoWrapper.addEventListener('click', function (event) {
+        event.stopPropagation(); // Impede que o evento se propague para outros elementos
+
+        if (notificacaoMenu.style.display === 'block') {
+            notificacaoMenu.style.display = 'none';
+        } else {
+            notificacaoMenu.style.display = 'block';
+        }
+    });
+
+    // Fechar o menu se clicar em qualquer lugar fora dele
+    document.addEventListener('click', function (event) {
+        if (event.target !== notificacaoWrapper && event.target !== notificacaoMenu) {
+            notificacaoMenu.style.display = 'none';
+        }
+    });
+});
 </script>
 </body>
 </html>

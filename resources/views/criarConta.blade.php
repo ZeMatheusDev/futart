@@ -9,7 +9,7 @@
 
     @if(session('logado') == false)
 
-    <div id="links">
+    <div id="linksDeslogado">
         <a href="/">Home</a>
         <a href="/logar">Logar</a>
     </div>
