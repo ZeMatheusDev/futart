@@ -67,6 +67,8 @@ class Kernel extends HttpKernel
     ];
 
     protected $routeMiddleware = [
+        'bloquear.acesso' => \App\Http\Middleware\BloquearAcessoConfirmarRacha::class,
+
         'verificarAutenticacao' => \App\Http\Middleware\verificarAutenticacao::class,
     ];
 }

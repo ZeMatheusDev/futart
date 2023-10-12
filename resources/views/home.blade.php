@@ -14,6 +14,16 @@
         <a href="/logar">Logar</a>
     </div>
 @endif
+@if(session('error'))
+<div style="text-align: center" class="alert alert-danger">
+    {{ session('error') }}
+</div>
+@endif
+@if(session('success'))
+<div style="text-align: center" class="alert alert-success">
+{{ session('success') }}
+</div>
+@endif
 @if(session('logado') == true)
 <div id="header">
     <div class="notificacao-wrapper">

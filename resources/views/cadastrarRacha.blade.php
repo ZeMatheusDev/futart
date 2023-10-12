@@ -74,6 +74,12 @@
         <input type="text" required placeholder="nome do racha" id="nome" pattern="^[a-zA-Z0-9 ]+$" maxlength="50" name="nome">
         <div style="text-align: center; font-size:15px; font-weight: bold">Descrição do racha:</div>
         <textarea required placeholder="descricao" id="descricao" pattern="^[a-zA-Z0-9]+$" name="descricao" rows="4"></textarea><br>
+        <div style="text-align: center; font-size:15px; font-weight: bold">Mensalista com prioridade na confirmação?</div>
+        <select required name="mensalista" id="mensalista">
+            <option value="{{true}}">Sim</option>
+            <option value="{{false}}">Não</option>
+        </select>   
+        <br>
         <div style="text-align: center; font-size:15px; font-weight: bold">Dia do racha:</div>
         
         <select required name="data" id="data">

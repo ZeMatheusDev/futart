@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('usuario_id')->constrained('conta')->onDelete('NO ACTION');
             $table->foreignId('racha_id')->constrained('racha')->onDelete('NO ACTION');
+            $table->boolean('mensalista');
             $table->timestamps();
         });
     }

@@ -41,7 +41,7 @@
             <br><br>
             <img src="{{asset('../invite.png')}}" alt="">
             <br><br>
-            Esse é um convite do <strong style="font-size: 25px">{{$dados['usuario']->nome}}</strong> para o racha <strong style="font-size: 25px">{{$dados['racha']->nome_do_racha}}</strong>
+            Esse é um convite do <strong style="font-size: 25px">{{$dados['dono']->nome}}</strong> para o racha <strong style="font-size: 25px">{{$dados['racha']->nome_do_racha}}</strong>
         </div>
         <br>
         <form action="{{asset('../aceitar')}}" style="display: inline" method="POST">

@@ -23,12 +23,12 @@
 }
 
 .notificacao {
-    /* Estilos para a imagem de notificação */
     width: 80px;
     height: 50px;
     border-radius: 50%;
     overflow: hidden;
-    margin-top: 20px;
+    margin-top: 90px;
+    margin-left: 20px;
     cursor: pointer;
     position: absolute; /* Adiciona posição absoluta para posicionar a imagem */
     left: 0; /* Posição à esquerda do contêiner pai */
@@ -42,7 +42,7 @@
     background-color: #fff;
     border: 1px solid #ccc;
     font-size: 14px;
-    width: 150px;
+    margin-top: 10px;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
@@ -77,8 +77,11 @@
     height: 50px;
     border-radius: 50%;
     overflow: hidden;
-    margin-top: 10px;
+    margin-top: 90px;
+    margin-left: 20px;
     cursor: pointer;
+    position: absolute; /* Adiciona posição absoluta para posicionar a imagem */
+    left: 0; /* Posição à esquerda do contêiner pai */
 }
 
 .notificacao-cheia-wrapper {
@@ -260,7 +263,7 @@ body {
 
 #cadastro {
     width: 800px; /* Define a largura da caixa de cadastro */
-    background-color: rgb(255, 254, 254, 0.8 ); /* Define a cor de fundo cinza */
+    background-color: rgb(255, 254, 254, 0.91 ); /* Define a cor de fundo cinza */
     height: 950px;
     margin: 50px auto; /* Centraliza horizontalmente */
     display: flex;

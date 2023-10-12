@@ -215,8 +215,8 @@ body {
 .detalhes {
     display: inline-block;
     text-align: center;
-    width: 300px;
-    height: 300px;
+    width: 350px;
+    height: 350px;
     margin: 0 10px; /* Espaço horizontal entre as divs */
     background-color: rgb(255, 255, 255, 0.7);
     border-radius: 50%;
@@ -229,7 +229,7 @@ body {
 
 .detalhes img {
     margin-top: 20px;
-    width: 100px;
+    width: 110px;
     height: 100px;
     border-radius: 50%;
     overflow: hidden;
@@ -238,13 +238,14 @@ body {
 
 #cadastro {
     width: 800px; /* Define a largura da caixa de cadastro */
-    background-color: rgb(255, 254, 254, 0.8 ); /* Define a cor de fundo cinza */
+    background-color: rgba(9, 18, 56, 0.95); /* Define a cor de fundo cinza */
     height: 950px;
     margin: 50px auto; /* Centraliza horizontalmente */
     display: flex;
     flex-direction: column; /* Empilha os elementos verticalmente */
     justify-content: center; /* Centraliza verticalmente */
     border-radius: 50px;
+    color: white;
     padding-top: 20px; /* Adiciona espaço na parte superior */
 }
 

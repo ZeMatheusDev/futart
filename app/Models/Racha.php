@@ -16,6 +16,7 @@ class Racha extends Model
         'quantidade',
         'hora_do_racha',
         'final_do_racha',
+        'mensalista_preferencia',
         'data_do_racha',
         'racha_token',
         'usuario_id',

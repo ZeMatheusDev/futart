@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use App\Models\Conta;
 use Illuminate\Support\Str;
+use Illuminate\Support\Carbon;
 
 
 use Illuminate\Http\Request;
@@ -17,7 +18,67 @@ class LoginController extends Controller
             ->join('conta', 'conta.id', '=', 'dono_id')
             ->join('racha', 'racha.id', '=', 'racha_id')
             ->get();
-        
+            $verificarRachaHoje = DB::table('racha')
+            ->where('usuario_id', '=', session()->all()['id'])
+            ->get();
+            if($verificarRachaHoje->isEmpty() == false){
+                foreach($verificarRachaHoje as $verificar){
+                    $diaHoje = Carbon::now()->format('d/m/Y');
+                    $verificarSeJaConfirmou = DB::table('racha_confirmacao')
+                    ->where('racha_id', '=', $verificar->id)
+                    ->where('confirmacao', '=', 1)
+                    ->where('data_dia_racha', '=', $diaHoje)
+                    ->get();
+                    if($verificarSeJaConfirmou->isEmpty() == true){
+                        $hoje = date('N'); 
+                        switch($hoje){
+                            case 1:
+                                $diaSemana = 'segunda';
+                                break;
+                            case 2:
+                                $diaSemana = 'terca';
+                                break;
+                            case 3:
+                                $diaSemana = 'quarta';
+                                break;
+                            case 4:
+                                $diaSemana = 'quinta';
+                                break;
+                            case 5:
+                                $diaSemana = 'sexta';
+                                break;
+                            case 6:
+                                $diaSemana = 'sabado';
+                                break;
+                            case 7:
+                                $diaSemana = 'domingo';
+                                break;
+                            default:
+                                $diaSemana = 'desconhecido';   
+                            }
+                        $diaDoRacha = $verificar->data_do_racha;
+                        if($diaDoRacha == $diaSemana){
+                            return view('/confirmarRacha')->with('verificarRachaHoje', $verificarRachaHoje);
+                        }
+                        else{
+                        }
+                    }
+                    else{
+                        $verificarEnvio = DB::table('jogadores_racha_dia')
+                        ->where('racha_dia', '=', $diaHoje)
+                        ->where('racha_id', '=', $verificar->id)
+                        ->get();
+                        if($verificarEnvio->isEmpty()){
+                            $todosJogadoresDoRacha = DB::table('conta_racha')
+                            ->where('racha_id', '=', $verificar->id)
+                            ->join('conta', 'conta.id', '=', 'conta_racha.usuario_id')
+                            ->get();
+                            return view('/telaEnvioJogadores')->with(['todosJogadoresDoRacha' => $todosJogadoresDoRacha]);
+                        }
+                    }
+                }
+            }
+
             return view('home')?->with('notificacoes', $notificacoes);
         }
         else{
@@ -106,6 +167,53 @@ class LoginController extends Controller
             ->join('conta', 'conta.id', '=', 'dono_id')
             ->join('racha', 'racha.id', '=', 'racha_id')
             ->get();
+            $verificarRachaHoje = DB::table('racha')
+            ->where('usuario_id', '=', session()->all()['id'])
+            ->get();
+            if($verificarRachaHoje->isEmpty() == false){
+                foreach($verificarRachaHoje as $verificar){
+                    $diaHoje = Carbon::now()->format('d/m/Y');
+                    $verificarSeJaConfirmou = DB::table('racha_confirmacao')
+                    ->where('racha_id', '=', $verificar->id)
+                    ->where('confirmacao', '=', 1)
+                    ->where('data_dia_racha', '=', $diaHoje)
+                    ->get();
+                    if($verificarSeJaConfirmou->isEmpty() == true){
+                        $hoje = date('N'); 
+                        switch($hoje){
+                            case 1:
+                                $diaSemana = 'segunda';
+                                break;
+                            case 2:
+                                $diaSemana = 'terca';
+                                break;
+                            case 3:
+                                $diaSemana = 'quarta';
+                                break;
+                            case 4:
+                                $diaSemana = 'quinta';
+                                break;
+                            case 5:
+                                $diaSemana = 'sexta';
+                                break;
+                            case 6:
+                                $diaSemana = 'sabado';
+                                break;
+                            case 7:
+                                $diaSemana = 'domingo';
+                                break;
+                            default:
+                                $diaSemana = 'desconhecido';   
+                            }
+                        $diaDoRacha = $verificar->data_do_racha;
+                        if($diaDoRacha == $diaSemana){
+                            return view('/confirmarRacha')->with('verificarRachaHoje', $verificarRachaHoje);
+                        }
+                        else{
+                        }
+                    }
+                }
+            }
             return view('logado')->with(['success' => 'Login feito com sucesso!', 'notificacoes' => $notificacoes]);
         }
         else{

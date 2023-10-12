@@ -74,6 +74,12 @@
             <img src="../fotos/{{basename($jogador->foto)}}" alt="Sua Imagem"><br>
             <p> {{$jogador->nome}} </p>
             <p>Posição: {{$jogador->posicao}}</p>
+            @if ($jogador->mensalista == 1)
+                <p>Mensalista</p>
+            @endif
+            @if ($jogador->mensalista == 0)
+            <p>Diarista</p>
+            @endif
             <br>
         <form action="" class="btn btn-success">Detalhes</form>
 
@@ -103,6 +109,8 @@
                 }
             });
         });
+        
 </script>
+
 </body>
 </html>

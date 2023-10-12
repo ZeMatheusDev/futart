@@ -134,7 +134,7 @@ body {
 
 #cadastro {
     width: 800px; /* Define a largura da caixa de cadastro */
-    background-color: rgb(182, 182, 182, 0.5); /* Define a cor de fundo cinza */
+    background-color: rgba(209, 203, 203, 0.95); /* Define a cor de fundo cinza */
     height: 1150px;
     margin: 50px auto; /* Centraliza horizontalmente */
     display: flex;

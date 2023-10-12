@@ -11,14 +11,15 @@
 @if(session('logado') == true)
 <div id="header">
     <div class="notificacao-wrapper">
-        @if ($notificacoes->isEmpty() == true)
-            
-        <img class="notificacao" src="{{ asset('../icone_vazio-removebg-preview.png') }}" alt="Sua Imagem">
-        <div class="notificacao-menu">
-            <a>Nenhuma solicitação</a>           
-        </div>
-        @endif
+
     </div>
+    @if ($notificacoes->isEmpty() == true)
+            
+    <img class="notificacao" src="{{ asset('../icone_vazio-removebg-preview.png') }}" alt="Sua Imagem">
+    <div class="notificacao-menu">
+        <a>Nenhuma solicitação</a>           
+    </div>
+    @endif
     @if ($notificacoes->isEmpty() == false)
             
         <img class="notificacao-cheia" src="{{ asset('../icone_cheio-removebg-preview.png') }}" alt="Sua Imagem">
@@ -92,9 +93,58 @@
 </div>
 @endforeach
 <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    if(document.querySelector('.notificacao')){
+                        var notificacaoWrapper = document.querySelector('.notificacao');
+            var notificacaoMenu = document.querySelector('.notificacao-menu');
+                    
+            notificacaoWrapper.addEventListener('click', function (event) {
+                event.stopPropagation(); // Impede que o evento se propague para outros elementos
+    
+                if (notificacaoMenu.style.display === 'block') {
+                    notificacaoMenu.style.display = 'none';
+                } else {
+                    notificacaoMenu.style.display = 'block';
+                }
+            });
+    
+            // Fechar o menu se clicar em qualquer lugar fora dele
+            document.addEventListener('click', function (event) {
+                if (event.target !== notificacaoWrapper && event.target !== notificacaoMenu) {
+                    notificacaoMenu.style.display = 'none';
+                }
+            });
+                    }
+
+        });
+        document.addEventListener('DOMContentLoaded', function () {
+            if(document.querySelector('.notificacao-cheia')){
+                var notificacaoWrapper = document.querySelector('.notificacao-cheia');
+            var notificacaoMenu = document.querySelector('.notificacao-menu');
+                    
+            notificacaoWrapper.addEventListener('click', function (event) {
+                event.stopPropagation(); // Impede que o evento se propague para outros elementos
+    
+                if (notificacaoMenu.style.display === 'block') {
+                    notificacaoMenu.style.display = 'none';
+                } else {
+                    notificacaoMenu.style.display = 'block';
+                }
+            });
+    
+            // Fechar o menu se clicar em qualquer lugar fora dele
+            document.addEventListener('click', function (event) {
+                if (event.target !== notificacaoWrapper && event.target !== notificacaoMenu) {
+                    notificacaoMenu.style.display = 'none';
+                }
+            });
+            }
+            
+        });
     var linkConvite = document.getElementById('linkConvite');
-    var racha = document.getElementById('inpSecreto').value;
-    var link = "localhost:8000/telaInvite/" + racha;
+    if(document.getElementById('inpSecreto')){
+        var racha = document.getElementById('inpSecreto').value;
+        var link = "localhost:8000/telaInvite/" + racha;
 
         linkConvite.addEventListener('click', function() {
             // Cria um elemento de input temporário
@@ -115,29 +165,9 @@
             // Feedback opcional
             alert('O link de convite para o racha foi copiado com sucesso!');
         });
-</script>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-    var notificacaoWrapper = document.querySelector('.notificacao-wrapper');
-    var notificacaoMenu = document.querySelector('.notificacao-menu');
-
-    notificacaoWrapper.addEventListener('click', function (event) {
-        event.stopPropagation(); // Impede que o evento se propague para outros elementos
-
-        if (notificacaoMenu.style.display === 'block') {
-            notificacaoMenu.style.display = 'none';
-        } else {
-            notificacaoMenu.style.display = 'block';
-        }
-    });
-
-    // Fechar o menu se clicar em qualquer lugar fora dele
-    document.addEventListener('click', function (event) {
-        if (event.target !== notificacaoWrapper && event.target !== notificacaoMenu) {
-            notificacaoMenu.style.display = 'none';
-        }
-    });
-});
+    }
+    
+        
 </script>
 </body>
 </html>

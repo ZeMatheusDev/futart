@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RachaController;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -18,6 +19,7 @@ Route::middleware(['verificarAutenticacao'])->group(function () {
     // Rotas protegidas
     Route::get('/listagem', [RachaController::class, 'listagem'])->name('listagem');
     Route::post('/listagemJogadores', [RachaController::class, 'listagemJogadores'])->name('listagemJogadores');
+    Route::post('/confirmarRacha', [RachaController::class, 'confirmarRacha'])->name('confirmarRacha');
     Route::get('/cadastrar', [RachaController::class, 'cadastrar'])->name('cadastrar');
     Route::post('/aceitar', [RachaController::class, 'aceitar'])->name('aceitar');
     Route::post('/cadastrando', [RachaController::class, 'cadastrando'])->name('cadastrando');

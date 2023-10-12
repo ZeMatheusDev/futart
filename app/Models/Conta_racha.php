@@ -13,6 +13,7 @@ class Conta_racha extends Model
     protected $fillable = [
         'usuario_id',
         'racha_id',
+        'mensalista',
     ];
 
 }
