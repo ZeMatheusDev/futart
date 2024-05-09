@@ -71,12 +71,17 @@
     margin: 100px auto;
     text-align: center;
     justify-content: center;
-    height: 500px;
-    width: 700px;
+    height: 250px;
+    width: 500px;
     border-radius: 50px;
     background-color: rgb(255, 255, 255, 0.7);
 }
 
+#botoesConfirmar form {
+    display: inline-flex; /* Use inline-flex para fazer os formulários ficarem em linha */
+    align-items: center; /* Alinhe os itens verticalmente */
+    margin-right: 10px; /* margem entre os formulários */
+}
 #texto {
     font-size: 20px;
     color: black;

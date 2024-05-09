@@ -75,7 +75,7 @@
         <div style="text-align: center; font-size:15px; font-weight: bold">Descrição do racha:</div>
         <textarea required placeholder="descricao" id="descricao" pattern="^[a-zA-Z0-9]+$" name="descricao" rows="4"></textarea><br>
         <div style="text-align: center; font-size:15px; font-weight: bold">Mensalista com prioridade na confirmação?</div>
-        <select required name="mensalista" id="mensalista">
+        <select required name="mensalista_preferencia" id="mensalista_preferencia">
             <option value="{{true}}">Sim</option>
             <option value="{{false}}">Não</option>
         </select>   
@@ -115,10 +115,6 @@
   document.getElementById("hora_fim").addEventListener("input", function () {
     verificacaoHora(this);
   });
-
-function verificacaoHora(input){
-
-}
 
   // Função para formatar a entrada como "HH:MM"
   function formatarHora(input) {

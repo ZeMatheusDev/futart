@@ -68,8 +68,34 @@
 </audio>
 @foreach ($listagem as $list)
 <div class="back">
-    <br><br> <br>
+    
+    @if (isset($list->tipoDeConfirmacao))
+    @if ($list->tipoDeConfirmacao == 'cancelado')
+        <p class="btn btn-danger">
+        O racha hoje foi <strong style="text-transform: uppercase;">{{$list->tipoDeConfirmacao}}</strong>
+    </p>
+    <form action="{{asset('../alterarConfirmacao')}}" method="POST">
+        @csrf
+    <input type="hidden" name="racha_id_secreto" id="inpSecreto" value='{{$list->racha_token}}'>
+    <button class="btn btn-success" style="margin: 0 auto">Alterar para confirmado</button>
+    </form>
+    <br>    @endif
+    
+    @endif
     <input type="hidden" id="inpSecreto" value='{{$list->racha_token}}'>
+    @if (isset($list->espera))
+    @if ($list->espera == true)
+    <p class="btn btn-warning" style="color:black">Você está na fila para o racha...
+        <a href="{{ route('duvidaDiarista') }}">
+            <img src="{{ asset('quest.png') }}" style="height: 40px; width: 50px; margin-top: -2px;" class="float-right">
+        </a>
+    </p>    @endif
+    @endif
+    @if (isset($list->confirmado))
+    @if ($list->confirmado == true)
+        <p class="btn btn-success" style="color:black">Você está CONFIRMADO no racha!</p>
+    @endif
+    @endif
         <p>Racha: {{$list->nome_do_racha}}</p>
         <p>Quantidade de jogadores no racha: {{$list->quantidade}}</p>
         <p>Dia da semana do racha: {{$list->data_do_racha}}</p>
@@ -79,6 +105,24 @@
         <input type="hidden" name="racha_id_secreto" id="racha_id_secreto" value="{{$list->racha_id}}">
         <button id="listagemJogadores" type="submit">Lista dos jogadores do racha</button>
         </form>
+        <br>
+        @if (isset($list->confirmar))
+            @if ($list->confirmar == true)
+            <form action="{{asset('../confirmarPresenca')}}" method="POST">
+                @csrf
+                <input type="hidden" name="racha_id_secreto" id="inpSecreto" value='{{$list->racha_token}}'>
+                <button class="btn btn-primary">Confirmar presença</button>
+            </form>
+            @endif
+            @if ($list->confirmar == false)
+            <form action="{{asset('../cancelarPresenca')}}" method="POST">
+                @csrf
+                <input type="hidden" name="racha_id_secreto" id="inpSecreto" value='{{$list->racha_token}}'>
+                <button class="btn btn-danger">Cancelar presença</button>
+            </form>
+            @endif
+        @endif
+        <br><br>
         @if ($list->usuario_id == session()->all()['id']) 
         <button id="linkConvite">Criar link de convite para o racha</button>
         <form action="{{asset('/enviarConvite')}}" method="POST">

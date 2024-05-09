@@ -24,21 +24,30 @@
         <source src="{{asset('../music.mp3')}}" type="audio/mpeg">
         Seu navegador não suporta o elemento de áudio.
       </audio>
-      @foreach ($verificarRachaHoje as $racha)
+      @foreach ($verificacaoDosRachasHoje as $racha)
       <div id="invite">
         <div id="texto">
-            <br><br><br><br>
+            <br>
+            <br>
             Confirme se haverá o racha "{{$racha->nome_do_racha}}" hoje
-            <form action="{{asset('../confirmarRacha')}}" method="POST">
-                @csrf
-            <input type="hidden" value="{{$racha->id}}" name="racha_id" id="racha_id">
+            <div id="botoesConfirmar">
+                <form action="{{asset('../confirmarRacha')}}" method="POST" class="mr-2">
+                    @csrf
+                    <input type="hidden" value="{{$racha->id}}" name="racha_id" id="racha_id">
 
-                <button type="submit" class="btn btn-success">Confirmar</button>
-            </form>
-            <form action="">
-                <button type="submit" class="btn btn-danger">Cancelar</button>
-            </form>
+                    <br><br><br><br>
+                    <button type="submit" class="btn btn-success botao-confirmar">Confirmar</button>
+                </form>
+                <form action="{{asset('../cancelarRacha')}}" method="POST" class="mr-2">
+                    @csrf
+                    <input type="hidden" value="{{$racha->id}}" name="racha_id" id="racha_id">
+
+                    <br><br><br><br>
+                    <button type="submit" class="btn btn-danger botao-cancelar">Cancelar</button>
+                </form>
+            </div>
         </div>
+        <br>
       @endforeach
       
         <br>

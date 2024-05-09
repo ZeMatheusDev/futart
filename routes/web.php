@@ -20,12 +20,18 @@ Route::middleware(['verificarAutenticacao'])->group(function () {
     Route::get('/listagem', [RachaController::class, 'listagem'])->name('listagem');
     Route::post('/listagemJogadores', [RachaController::class, 'listagemJogadores'])->name('listagemJogadores');
     Route::post('/confirmarRacha', [RachaController::class, 'confirmarRacha'])->name('confirmarRacha');
+    Route::post('/cancelarRacha', [RachaController::class, 'cancelarRacha'])->name('cancelarRacha');
     Route::get('/cadastrar', [RachaController::class, 'cadastrar'])->name('cadastrar');
     Route::post('/aceitar', [RachaController::class, 'aceitar'])->name('aceitar');
+    Route::post('/confirmarPresenca', [RachaController::class, 'confirmarPresenca'])->name('confirmarPresenca');
+    Route::post('/cancelarPresenca', [RachaController::class, 'cancelarPresenca'])->name('cancelarPresenca');
     Route::post('/cadastrando', [RachaController::class, 'cadastrando'])->name('cadastrando');
     Route::post('/enviarConvite', [RachaController::class, 'enviarConvite'])->name('enviarConvite');
     Route::get('/telaInvite/{racha_token}', [RachaController::class, 'telaInvite'])->name('telaInvite');
     Route::post('/recusarRacha', [RachaController::class, 'recusarRacha'])->name('recusarRacha');
+    Route::post('/alterarConfirmacao', [RachaController::class, 'alterarConfirmacao'])->name('alterarConfirmacao');
+    Route::get('/duvidaDiarista', [RachaController::class, 'duvidaDiarista'])->name('duvidaDiarista');
+    
 });
 
 // Outras rotas públicas
@@ -35,6 +41,7 @@ Route::get('/logar', [LoginController::class, 'logar'])->name('logar');
 Route::post('/criandoConta', [LoginController::class, 'criandoConta'])->name('criandoConta');
 Route::post('/logando', [LoginController::class, 'logando'])->name('logando');
 Route::post('/deslogar', [LoginController::class, 'deslogar'])->name('deslogar');
+
 
 
 

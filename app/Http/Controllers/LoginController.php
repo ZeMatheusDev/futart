@@ -26,7 +26,6 @@ class LoginController extends Controller
                     $diaHoje = Carbon::now()->format('d/m/Y');
                     $verificarSeJaConfirmou = DB::table('racha_confirmacao')
                     ->where('racha_id', '=', $verificar->id)
-                    ->where('confirmacao', '=', 1)
                     ->where('data_dia_racha', '=', $diaHoje)
                     ->get();
                     if($verificarSeJaConfirmou->isEmpty() == true){
@@ -58,25 +57,24 @@ class LoginController extends Controller
                             }
                         $diaDoRacha = $verificar->data_do_racha;
                         if($diaDoRacha == $diaSemana){
-                            return view('/confirmarRacha')->with('verificarRachaHoje', $verificarRachaHoje);
+                            $verificacaoDosRachasHoje[] = $verificar;
                         }
                         else{
                         }
                     }
                     else{
-                        $verificarEnvio = DB::table('jogadores_racha_dia')
-                        ->where('racha_dia', '=', $diaHoje)
-                        ->where('racha_id', '=', $verificar->id)
-                        ->get();
-                        if($verificarEnvio->isEmpty()){
-                            $todosJogadoresDoRacha = DB::table('conta_racha')
-                            ->where('racha_id', '=', $verificar->id)
-                            ->join('conta', 'conta.id', '=', 'conta_racha.usuario_id')
-                            ->get();
-                            return view('/telaEnvioJogadores')->with(['todosJogadoresDoRacha' => $todosJogadoresDoRacha]);
-                        }
+
                     }
                 }
+                if(isset($verificacaoDosRachasHoje)){
+                    return view('/confirmarRacha')->with('verificacaoDosRachasHoje', $verificacaoDosRachasHoje);
+                }
+                else{
+            return view('home')?->with('notificacoes', $notificacoes);
+
+                }
+
+
             }
 
             return view('home')?->with('notificacoes', $notificacoes);
@@ -207,14 +205,14 @@ class LoginController extends Controller
                             }
                         $diaDoRacha = $verificar->data_do_racha;
                         if($diaDoRacha == $diaSemana){
-                            return view('/confirmarRacha')->with('verificarRachaHoje', $verificarRachaHoje);
+                            return redirect()->route('home')->with('verificarRachaHoje', $verificarRachaHoje);;
                         }
                         else{
                         }
                     }
                 }
             }
-            return view('logado')->with(['success' => 'Login feito com sucesso!', 'notificacoes' => $notificacoes]);
+            return redirect()->route('home');
         }
         else{
             return redirect()->back()->with('error', 'Erro, conta não encontrada!');
