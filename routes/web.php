@@ -31,6 +31,7 @@ Route::middleware(['verificarAutenticacao'])->group(function () {
     Route::post('/recusarRacha', [RachaController::class, 'recusarRacha'])->name('recusarRacha');
     Route::post('/alterarConfirmacao', [RachaController::class, 'alterarConfirmacao'])->name('alterarConfirmacao');
     Route::get('/duvidaDiarista', [RachaController::class, 'duvidaDiarista'])->name('duvidaDiarista');
+    Route::get('/duvidaRachaSemMensalista', [RachaController::class, 'duvidaRachaSemMensalista'])->name('duvidaRachaSemMensalista');
     
 });
 

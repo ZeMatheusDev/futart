@@ -369,6 +369,8 @@ class RachaController extends Controller
     }
 
     public function listagem(){
+ 
+
         $listagem = DB::table('Conta_racha')
         ->where('Conta_racha.usuario_id', '=', session()->all()['id'])
         ->join('racha', 'racha.id', '=', 'racha_id')
@@ -423,6 +425,15 @@ class RachaController extends Controller
                         ->where('racha_id', '=', $list->racha_id)
                         ->where('racha_dia', '=', $diaHoje)
                         ->get();
+                        $verificarSeRachaTemPreferencia = DB::table('racha')
+                        ->where('id', $list->racha_id)
+                        ->first();
+                        if($verificarSeRachaTemPreferencia->mensalista_preferencia == 0){
+                            $list->preferencia = 0;
+                        }
+                        elseif($verificarSeRachaTemPreferencia->mensalista_preferencia == 1){
+                            $list->preferencia = 1;
+                        }
                         if($verificarJogadorConfirmadoRacha->isEmpty() == false){
                             $list->confirmado = true;
                         }
@@ -536,6 +547,15 @@ class RachaController extends Controller
         ->join('racha', 'racha.id', '=', 'racha_id')
         ->get();
         return view('duvidaDiarista')->with('notificacoes', $notificacoes);
+    }
+
+    protected function duvidaRachaSemMensalista(){
+        $notificacoes = DB::table('convite')
+        ->where('convidado_id', '=', session()->all()['id'])
+        ->join('conta', 'conta.id', '=', 'dono_id')
+        ->join('racha', 'racha.id', '=', 'racha_id')
+        ->get();
+        return view('duvidaRachaSemMensalista')->with('notificacoes', $notificacoes);
     }
 
     public function confirmarPresenca(Request $request){

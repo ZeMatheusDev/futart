@@ -76,7 +76,7 @@
     </p>
     <form action="{{asset('../alterarConfirmacao')}}" method="POST">
         @csrf
-    <input type="hidden" name="racha_id_secreto" id="inpSecreto" value='{{$list->racha_token}}'>
+    <input type="hidden" name="racha_id_secreto" id="" value='{{$list->racha_token}}'>
     <button class="btn btn-success" style="margin: 0 auto">Alterar para confirmado</button>
     </form>
     <br>    @endif
@@ -85,11 +85,21 @@
     <input type="hidden" id="inpSecreto" value='{{$list->racha_token}}'>
     @if (isset($list->espera))
     @if ($list->espera == true)
+    @if ($list->preferencia == 1)
     <p class="btn btn-warning" style="color:black">Você está na fila para o racha...
         <a href="{{ route('duvidaDiarista') }}">
             <img src="{{ asset('quest.png') }}" style="height: 40px; width: 50px; margin-top: -2px;" class="float-right">
         </a>
-    </p>    @endif
+    </p> 
+    @endif
+    @if ($list->preferencia == 0)
+    <p class="btn btn-warning" style="color:black">Você está na fila para o racha...
+        <a href="{{ route('duvidaRachaSemMensalista') }}">
+            <img src="{{ asset('quest.png') }}" style="height: 40px; width: 50px; margin-top: -2px;" class="float-right">
+        </a>
+    </p> 
+    @endif
+    @endif
     @endif
     @if (isset($list->confirmado))
     @if ($list->confirmado == true)
@@ -124,7 +134,7 @@
         @endif
         <br><br>
         @if ($list->usuario_id == session()->all()['id']) 
-        <button id="linkConvite">Criar link de convite para o racha</button>
+        <button class="linkConvite" id="linkConvite" data-racha-token="{{$list->racha_token}}">Criar link de convite para o racha</button>
         <form action="{{asset('/enviarConvite')}}" method="POST">
             @csrf
         <div id="envio">
@@ -185,31 +195,27 @@
             }
             
         });
-    var linkConvite = document.getElementById('linkConvite');
-    if(document.getElementById('inpSecreto')){
-        var racha = document.getElementById('inpSecreto').value;
-        var link = "localhost:8000/telaInvite/" + racha;
-
-        linkConvite.addEventListener('click', function() {
-            // Cria um elemento de input temporário
+        document.addEventListener('DOMContentLoaded', function () {
+            var linkConvite = document.querySelectorAll('.linkConvite');
+            linkConvite.forEach(function(element) {
+        element.addEventListener('click', function() {
+            var rachaToken = this.getAttribute('data-racha-token');
+            var link = "localhost:8000/telaInvite/" + rachaToken;
             var inputTemporario = document.createElement('input');
             inputTemporario.value = link;
             document.body.appendChild(inputTemporario);
-
-            // Seleciona o conteúdo do input temporário
             inputTemporario.select();
             inputTemporario.setSelectionRange(0, 99999); // Para dispositivos móveis
-
-            // Tenta copiar o conteúdo para a área de transferência
             document.execCommand('copy');
-
-            // Remove o input temporário
             document.body.removeChild(inputTemporario);
 
-            // Feedback opcional
+            console.log(rachaToken);
             alert('O link de convite para o racha foi copiado com sucesso!');
+
+            // Seu código para copiar o link para a área de transferência...
         });
-    }
+    });
+        })
     
         
 </script>
