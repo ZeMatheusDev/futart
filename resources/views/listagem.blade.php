@@ -83,6 +83,8 @@
     
     @endif
     <input type="hidden" id="inpSecreto" value='{{$list->racha_token}}'>
+    @if (isset($list->passouDaHora))
+    @if ($list->passouDaHora == false)
     @if (isset($list->espera))
     @if ($list->espera == true)
     @if ($list->preferencia == 1)
@@ -101,9 +103,15 @@
     @endif
     @endif
     @endif
+    @endif
+    @endif
+    @if (isset($list->passouDaHora))
+    @if ($list->passouDaHora == false)
     @if (isset($list->confirmado))
     @if ($list->confirmado == true)
         <p class="btn btn-success" style="color:black">Você está CONFIRMADO no racha!</p>
+    @endif
+    @endif
     @endif
     @endif
         <p>Racha: {{$list->nome_do_racha}}</p>
@@ -116,6 +124,8 @@
         <button id="listagemJogadores" type="submit">Lista dos jogadores do racha</button>
         </form>
         <br>
+        @if (isset($list->passouDaHora))
+        @if ($list->passouDaHora == false)
         @if (isset($list->confirmar))
             @if ($list->confirmar == true)
             <form action="{{asset('../confirmarPresenca')}}" method="POST">
@@ -131,6 +141,8 @@
                 <button class="btn btn-danger">Cancelar presença</button>
             </form>
             @endif
+        @endif
+        @endif
         @endif
         <br><br>
         @if ($list->usuario_id == session()->all()['id']) 

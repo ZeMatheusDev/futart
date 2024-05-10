@@ -428,6 +428,15 @@ class RachaController extends Controller
                         $verificarSeRachaTemPreferencia = DB::table('racha')
                         ->where('id', $list->racha_id)
                         ->first();
+                        $horaAtual = Carbon::now();
+                        $horaFormatada = $horaAtual->format('H:i:s.u');
+
+                        if($list->hora_do_racha < $horaFormatada){
+                            $list->passouDaHora = true;
+                        }
+                        else{
+                            $list->passouDaHora = false;
+                        }
                         if($verificarSeRachaTemPreferencia->mensalista_preferencia == 0){
                             $list->preferencia = 0;
                         }
