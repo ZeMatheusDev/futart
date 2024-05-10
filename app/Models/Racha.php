@@ -19,6 +19,7 @@ class Racha extends Model
         'mensalista_preferencia',
         'data_do_racha',
         'racha_token',
+        'quantidade_maxima_jogo',
         'usuario_id',
         'created_at',
         'updated_at',

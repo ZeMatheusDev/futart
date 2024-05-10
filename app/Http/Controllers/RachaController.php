@@ -314,6 +314,7 @@ class RachaController extends Controller
                 $racha->data_do_racha = $request->data;
                 $racha->hora_do_racha = $request->hora_inicio;
                 $racha->final_do_racha = $request->hora_fim;
+                $racha->quantidade_maxima_jogo = $request->quantidade_maxima_jogo;
                 $racha->usuario_id = session()->all()['id'];
                 $racha->created_at = now();
                 $racha->updated_at = now();
@@ -349,6 +350,7 @@ class RachaController extends Controller
             $racha->final_do_racha = $request->hora_fim;
             $token = Str::random(32);
             $racha->racha_token = $token;
+            $racha->quantidade_maxima_jogo = $request->quantidade_maxima_jogo;  
             $racha->usuario_id = session()->all()['id'];
             $racha->created_at = now();
             $racha->updated_at = now();
@@ -369,14 +371,12 @@ class RachaController extends Controller
     }
 
     public function listagem(){
- 
-
         $listagem = DB::table('Conta_racha')
         ->where('Conta_racha.usuario_id', '=', session()->all()['id'])
         ->join('racha', 'racha.id', '=', 'racha_id')
         ->join('conta', 'conta.id', '=', 'racha.usuario_id')
         ->get();
-        $notificacoes = DB::table('convite')
+    $notificacoes = DB::table('convite')
         ->where('convidado_id', '=', session()->all()['id'])
         ->join('conta', 'conta.id', '=', 'dono_id')
         ->join('racha', 'racha.id', '=', 'racha_id')

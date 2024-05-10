@@ -70,17 +70,18 @@
     @csrf
     <div id="cadastro">
         <div id="titulo">Cadastrar Racha</div>
-        <div style="text-align: center; font-size:15px; font-weight: bold">Nome do racha:</div>
+        <div class="cadastroDiv">Nome do racha:</div>
         <input type="text" required placeholder="nome do racha" id="nome" pattern="^[a-zA-Z0-9 ]+$" maxlength="50" name="nome">
-        <div style="text-align: center; font-size:15px; font-weight: bold">Descrição do racha:</div>
-        <textarea required placeholder="descricao" id="descricao" pattern="^[a-zA-Z0-9]+$" name="descricao" rows="4"></textarea><br>
-        <div style="text-align: center; font-size:15px; font-weight: bold">Mensalista com prioridade na confirmação?</div>
+        <div class="cadastroDiv">Descrição do racha:</div>
+        <textarea required placeholder="descricao" id="descricao" pattern="^[a-zA-Z0-9]+$" name="descricao" maxlength="200" rows="4"></textarea><br>
+        <div id="juntarMensal">
+        <div class="cadastroDiv1">Mensalista com prioridade na confirmação?</div>
         <select required name="mensalista_preferencia" id="mensalista_preferencia">
             <option value="{{true}}">Sim</option>
             <option value="{{false}}">Não</option>
         </select>   
         <br>
-        <div style="text-align: center; font-size:15px; font-weight: bold">Dia do racha:</div>
+        <div class="cadastroDiv1">Dia do racha:</div>
         
         <select required name="data" id="data">
             <option value="segunda">Segunda-feira</option>
@@ -91,19 +92,41 @@
             <option value="sabado">Sábado</option>
             <option value="domingo">Domingo</option>
         </select>      
+    </div>
         <br>
-        <div style="text-align: center; font-size:15px; font-weight: bold">Hora de inicio do racha:</div>
-
-        <input type="text" id="hora_inicio" name="hora_inicio" maxlength="5" placeholder="00:00" required>
-        <div style="text-align: center; font-size:15px; font-weight: bold">Hora de fim do racha:</div>
-
-        <input type="text" id="hora_fim" name="hora_fim" maxlength="5" placeholder="00:00" required>
+        <div id="juntarHora">
+            <div class="cadastroDiv2">
+                <div>Hora de inicio do racha:</div>
+                <input type="text" id="hora_inicio" name="hora_inicio" maxlength="5" placeholder="00:00" required>
+            </div>
+        
+            <div class="cadastroDiv2">
+                <div>Hora de fim do racha:</div>
+                <input type="text" id="hora_fim" name="hora_fim" maxlength="5" placeholder="00:00" required>
+            </div>
+        </div>
+        <div class="quantidadeMax">
+            <div>Quantidade de jogadores no jogo:</div>
+            <input name="quantidade_maxima_jogo" id="quantidade_maxima_jogo" maxlength="2">
+        </div>
         <button id="final" class="btn btn-secondary" type="submit">
             Cadastrar
         </button>
     </div>
 </form>
 <script>
+
+    document.getElementById('quantidade_maxima_jogo').addEventListener('input', function(){
+        this.value = this.value.replace(/[^0-9]/, '')
+    })
+
+    
+
+document.addEventListener('DOMContentLoaded', function () {
+
+})
+
+
       document.getElementById("hora_inicio").addEventListener("input", function () {
     formatarHora(this);
   });

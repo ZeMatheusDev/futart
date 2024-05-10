@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('data_dia_racha');
             $table->boolean('confirmacao');
+            $table->boolean('enviado')->nullable();
             $table->foreignId('racha_id')->constrained('racha')->onDelete('NO ACTION');
             $table->timestamps();
         });

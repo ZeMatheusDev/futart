@@ -180,6 +180,55 @@
     overflow: hidden;
     align-self: flex-start; /* Alinha a foto no topo do contêiner */
 }
+
+.cadastroDiv{
+    display: inline-flex;
+    margin: 0 auto;
+}
+
+.cadastroDiv input{
+    display: block; /* Faz os inputs se comportarem como blocos de nível */
+    margin: 10px auto; /* Adiciona margem em cima e embaixo dos inputs */
+    margin-bottom: 35px; /* Adiciona margem inferior para espaçamento entre os inputs */
+    border: none;
+    text-decoration: none;
+    text-align: center;
+    height: 50px;
+    width: 350px;
+    border-radius: 40px;
+    border: none;
+}
+
+#juntarMensal{
+    text-align: center;
+}
+#juntarHora {
+    text-align: center; /* Centraliza o conteúdo horizontalmente */
+}
+
+.cadastroDiv2 {
+    display: inline-block; /* Mantém os elementos lado a lado */
+    vertical-align: top; /* Alinha os elementos verticalmente ao topo */
+    margin-bottom: 10px; /* Adiciona espaço entre as divs */
+}
+
+
+.cadastroDiv2 > div {
+    margin-bottom: 5px; /* Adiciona espaço entre o texto e o input */
+}
+
+#juntarHora input {
+    display: inline-flex;
+    margin: 10px; 
+    height: 50px;
+    width: 200px;
+    margin-left: 25px;
+    border-radius: 10px;
+    border: none;
+    text-align: center;
+}
+
+
 .back #listagemJogadores{
     font-size: 20px;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
@@ -249,21 +298,17 @@ body {
     padding-top: 20px; /* Adiciona espaço na parte superior */
 }
 
-#cadastro input {
+#nome{
     display: block; /* Faz os inputs se comportarem como blocos de nível */
     margin: 10px auto; /* Adiciona margem em cima e embaixo dos inputs */
     margin-bottom: 35px; /* Adiciona margem inferior para espaçamento entre os inputs */
     border: none;
     text-decoration: none;
     text-align: center;
-    height: 50px;
-    width: 350px;
-    border-radius: 40px;
+    height: 40px;
+    width: 300px;
+    border-radius: 10px;
     border: none;
-}
-#cadastro input:focus {
-    outline: none;
-    transition: 500ms;
 }
 
 #cadastro #descricao:focus {
@@ -272,10 +317,9 @@ body {
 }
 
 #cadastro #descricao{
-    border-radius: 20px;
     border: none;
     text-decoration: none;
-
+    height: 80px;
     width: 350px;
     margin: 10px auto;
     text-align: center;
@@ -283,20 +327,34 @@ body {
 
 #cadastro select{
     border-radius: 10px;
-    width: 350px;
+    width: 200px;
+    display: flex;
     height: 40px;
     margin: 10px auto;
     text-align: center;
 }
 
 #titulo{
-
     display: flex;
-    margin: 0 auto;
+    margin: -80px auto 50px;
     padding: 20px;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 25px;
     font-weight: bold;
+}
+
+.quantidadeMax{
+align-items: center;
+    margin: 0 auto;
+}
+
+.quantidadeMax input{
+    border: none;
+    text-decoration: none;
+    height: 35px;
+    width: 150px;
+    margin: 10px 50px;
+    text-align: center;
 }
 
 #cadastro button{

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('nome_do_racha');
             $table->string('descricao');
             $table->integer('quantidade');
+            $table->integer('quantidade_maxima_jogo');
             $table->time('hora_do_racha');
             $table->time('final_do_racha');
             $table->boolean('mensalista_preferencia');

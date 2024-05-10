@@ -81,7 +81,7 @@
             <p>Diarista</p>
             @endif
             <br>
-        <form action="" class="btn btn-success">Detalhes</form>
+        <form action="{{route('')}}" class="btn btn-success">Detalhes</form>
 
         </div>
     @endforeach
