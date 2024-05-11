@@ -30,6 +30,7 @@ Route::middleware(['verificarAutenticacao'])->group(function () {
     Route::get('/telaInvite/{racha_token}', [RachaController::class, 'telaInvite'])->name('telaInvite');
     Route::post('/recusarRacha', [RachaController::class, 'recusarRacha'])->name('recusarRacha');
     Route::post('/alterarConfirmacao', [RachaController::class, 'alterarConfirmacao'])->name('alterarConfirmacao');
+    Route::post('/alterarDiarista', [RachaController::class, 'alterarDiarista'])->name('alterarDiarista');
     Route::get('/duvidaDiarista', [RachaController::class, 'duvidaDiarista'])->name('duvidaDiarista');
     Route::get('/duvidaRachaSemMensalista', [RachaController::class, 'duvidaRachaSemMensalista'])->name('duvidaRachaSemMensalista');
     

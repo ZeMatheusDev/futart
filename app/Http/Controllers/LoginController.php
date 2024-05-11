@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use App\Models\Conta;
+use App\Models\Racha;
 use Illuminate\Support\Str;
 use Illuminate\Support\Carbon;
 
@@ -56,7 +57,7 @@ class LoginController extends Controller
                                 $diaSemana = 'desconhecido';   
                             }
                         $diaDoRacha = $verificar->data_do_racha;
-                        if($diaDoRacha == $diaSemana){
+                        if($diaDoRacha == $diaSemana && $verificar->ativo == 1){
                             $verificacaoDosRachasHoje[] = $verificar;
                         }
                         else{
@@ -98,7 +99,7 @@ class LoginController extends Controller
         if($verificacaoLogin->isEmpty() == true && $verificacaoEmail->isEmpty() == true){
             $user = new Conta();
             $user->usuario = $request->usuario;
-            $user->senha = $request->senha;
+            $user->senha = sha1($request->senha);
             $user->posicao = $request->posicao;
             $user->nome = $request->nome;
             $token = Str::random(32);
@@ -149,7 +150,7 @@ class LoginController extends Controller
     }    
 
     public function logando(Request $request){
-        $verificacao = DB::table('Conta')->where('usuario', '=', $request->usuario)->where('senha', '=', $request->senha)->get();
+        $verificacao = DB::table('Conta')->where('usuario', '=', $request->usuario)->where('senha', '=', sha1($request->senha))->get();
         if($verificacao->isEmpty() == false){
             $fotonova = $verificacao[0]->foto;
             $info = pathinfo($fotonova);
@@ -210,6 +211,28 @@ class LoginController extends Controller
                         else{
                         }
                     }
+                }
+            }
+            if(session()->all()['vip'] == 0){
+                $verificacoesRachas = DB::table('racha')
+                ->where('usuario_id', session()->all()['id'])
+                ->orderBy('created_at', 'desc')
+                ->get();
+                $contador = 0;
+                if(isset($verificacoesRachas)){
+                    for ($i=0; $i < (count($verificacoesRachas)-1); $i++) { 
+                        Racha::where('id', $verificacoesRachas[$i]->id)->update(['ativo' => 0]);
+                    }
+                }
+            }
+            if(session()->all()['vip'] == 1){
+                $verificacoesRachas = DB::table('racha')
+                ->where('usuario_id', session()->all()['id'])
+                ->orderBy('created_at', 'desc')
+                ->get();
+                foreach($verificacoesRachas as $verificacao){
+                    Racha::where('id', $verificacao->id)->update(['ativo' => 1]);
+
                 }
             }
             return redirect()->route('home');

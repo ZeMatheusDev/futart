@@ -264,8 +264,8 @@ body {
 .detalhes {
     display: inline-block;
     text-align: center;
-    width: 350px;
-    height: 350px;
+    width: 400px;
+    height: 400px;
     margin: 0 10px; /* Espaço horizontal entre as divs */
     background-color: rgb(255, 255, 255, 0.7);
     border-radius: 50%;

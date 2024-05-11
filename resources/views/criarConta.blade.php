@@ -11,7 +11,7 @@
 
     <div id="linksDeslogado">
         <a href="/">Home</a>
-        <a href="/logar">Logar</a>
+        <a href="/logar">Login</a>
     </div>
 @endif
 @if(session('logado') == true)

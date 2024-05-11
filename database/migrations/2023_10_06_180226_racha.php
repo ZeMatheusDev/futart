@@ -20,6 +20,7 @@ return new class extends Migration
             $table->time('hora_do_racha');
             $table->time('final_do_racha');
             $table->boolean('mensalista_preferencia');
+            $table->boolean('ativo');
             $table->string('data_do_racha');
             $table->string('racha_token')->unique();
             $table->foreignId('usuario_id')->constrained('conta')->onDelete('CASCADE');

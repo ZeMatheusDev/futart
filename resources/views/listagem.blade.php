@@ -67,6 +67,7 @@
     Seu navegador não suporta o elemento de áudio.
 </audio>
 @foreach ($listagem as $list)
+@if($list->ativo == null || $list->ativo == 1)
 <div class="back">
     
     @if (isset($list->tipoDeConfirmacao))
@@ -157,6 +158,7 @@
         </form>
         @endif
 </div>
+@endif
 @endforeach
 <script>
                 document.addEventListener('DOMContentLoaded', function () {

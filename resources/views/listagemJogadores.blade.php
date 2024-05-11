@@ -76,12 +76,35 @@
             <p>Posição: {{$jogador->posicao}}</p>
             @if ($jogador->mensalista == 1)
                 <p>Mensalista</p>
+                @if ($jogador->donoDoRacha == true)
+
+                <form action="{{asset('alterarDiarista')}}" method="POST">
+                    @csrf
+                    <input type="hidden" name="jogador_id" value="{{$jogador->usuario_id}}">
+                    <input type="hidden" name="racha_id" value="{{$jogador->racha_id}}">
+                    <input type="hidden" name="alterado" value="diarista">
+                    <input type="hidden" name="racha_id_secreto" value="{{$req}}">
+                    <button class="btn btn-primary">Alterar para diarista</button>
+                </form>
             @endif
+            @endif
+
             @if ($jogador->mensalista == 0)
             <p>Diarista</p>
+            @if ($jogador->donoDoRacha == true)
+
+            <form action="{{ asset('alterarDiarista') }}" method="POST">
+                @csrf
+                <input type="hidden" name="jogador_id" value="{{ $jogador->usuario_id }}">
+                <input type="hidden" name="racha_id" value="{{ $jogador->racha_id }}">
+                <input type="hidden" name="alterado" value="mensalista">
+                <input type="hidden" name="racha_id_secreto" value="{{$req}}">
+                <button class="btn btn-primary" type="submit">Alterar para Mensalista</button>
+            </form>
+            @endif
             @endif
             <br>
-        <form action="{{route('')}}" class="btn btn-success">Detalhes</form>
+        <form action="{{asset('listagemJogadores')}}" class="btn btn-success">Detalhes</form>
 
         </div>
     @endforeach

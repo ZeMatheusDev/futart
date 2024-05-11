@@ -66,7 +66,7 @@ class RachaController extends Controller
                                         $diaSemana = 'desconhecido';   
                                     }
                                 $diaDoRacha = $verificar->data_do_racha;
-                                if($diaDoRacha == $diaSemana){
+                                if($diaDoRacha == $diaSemana && $verificar->ativo == 1){
                                     $verificacaoDosRachasHoje[] = $verificar;
                                 }
                                 else{
@@ -273,7 +273,7 @@ class RachaController extends Controller
                                         $diaSemana = 'desconhecido';   
                                     }
                                 $diaDoRacha = $verificar->data_do_racha;
-                                if($diaDoRacha == $diaSemana){
+                                if($diaDoRacha == $diaSemana && $verificar->ativo == 1){
                                     $verificacaoDosRachasHoje[] = $verificar;
                                 }
                                 else{
@@ -296,7 +296,11 @@ class RachaController extends Controller
     }
 
     public function cadastrando(Request $request){
-        if(session()->all()['vip'] == 0){
+        $vip = DB::table('conta')
+        ->where('id', session()->all()['id'])
+        ->pluck('vip')
+        ->first();
+        if($vip == 0){
             $verificacao = DB::table('racha')->where('usuario_id', '=', session()->all()['id'])->get();
             if($verificacao->isEmpty() == true){
                 $racha = new Racha();
@@ -335,6 +339,10 @@ class RachaController extends Controller
             return redirect()->back()->with('error', 'Voce ja possui um racha cadastrado como FREE ACCOUNT!');
         }
         else{
+            $verificarQuantidade = DB::table('racha')
+            ->where('usuario_id', session()->all()['id'])
+            ->get();
+            if(count($verificarQuantidade) < 5){
             $racha = new Racha();
             $racha->nome_do_racha = $request->nome;
             if($request->mensalista_preferencia == null){
@@ -368,6 +376,11 @@ class RachaController extends Controller
             $contaRacha->save();
             return redirect()->back()->with('success', 'Cadastrado feito com sucesso!');
         }
+        else{
+            return redirect()->back()->with('error', 'Voce ja possui o limite de rachas cadastrados!');
+
+        }
+    }
     }
 
     public function listagem(){
@@ -469,6 +482,7 @@ class RachaController extends Controller
                     }
                 }
         }
+
         $verificarRachaHoje = DB::table('racha')
             ->where('usuario_id', '=', session()->all()['id'])
             ->get();
@@ -515,7 +529,7 @@ class RachaController extends Controller
                                         $diaSemana = 'desconhecido';   
                                     }
                                 $diaDoRacha = $verificar->data_do_racha;
-                                if($diaDoRacha == $diaSemana){
+                                if($diaDoRacha == $diaSemana && $verificar->ativo == 1){
                                     $verificacaoDosRachasHoje[] = $verificar;
                                 }
                                 else{
@@ -657,6 +671,15 @@ class RachaController extends Controller
                          ->where('racha_id', '=', $request->racha_id_secreto);
                 })
                 ->get();
+                $verificarDonoDoRacha = DB::table('racha')
+                ->where('id', $jogador->racha_id)
+                ->first();
+                if($verificarDonoDoRacha->usuario_id == session()->all()['id']){
+                    $jogadorSolo[0]->donoDoRacha = true;
+                }
+                else{
+                    $jogadorSolo[0]->donoDoRacha = false;
+                }
             $jogadoreSeparados[] = $jogadorSolo[0];
         }
 
@@ -706,7 +729,7 @@ class RachaController extends Controller
                                         $diaSemana = 'desconhecido';   
                                     }
                                 $diaDoRacha = $verificar->data_do_racha;
-                                if($diaDoRacha == $diaSemana){
+                                if($diaDoRacha == $diaSemana && $verificar->ativo == 1){
                                     $verificacaoDosRachasHoje[] = $verificar;
                                 }
                                 else{
@@ -720,13 +743,49 @@ class RachaController extends Controller
                             return view('/confirmarRacha')->with('verificacaoDosRachasHoje', $verificacaoDosRachasHoje);
                         }
                         else{
-                            view('listagemJogadores')->with(['jogadoresSeparados' => $jogadoreSeparados, 'notificacoes' => $notificacoes]);
-        
+                            if(isset($request->alterado)){
+                                if($request->alterado == 'diarista'){
+                                    return view('listagemJogadores')->with(['jogadoresSeparados' => $jogadoreSeparados, 'notificacoes' => $notificacoes, 'req' => $request->racha_id_secreto]);
+                                }
+                                elseif($request->alterado == 'mensalista'){
+                                    return view('listagemJogadores')->with(['jogadoresSeparados' => $jogadoreSeparados, 'notificacoes' => $notificacoes, 'req' => $request->racha_id_secreto]);
+                                }
+                            }
+                            else{
+                                return view('listagemJogadores')->with(['jogadoresSeparados' => $jogadoreSeparados, 'notificacoes' => $notificacoes, 'req' => $request->racha_id_secreto]);
+                                
+                            }
                         }
                     }
                 }
             }
+            if(isset($request->alterado)){
+                if($request->alterado == 'diarista'){
+                    return view('listagemJogadores')->with(['jogadoresSeparados' => $jogadoreSeparados, 'notificacoes' => $notificacoes, 'req' => $request->racha_id_secreto]);
+                }
+                elseif($request->alterado == 'mensalista'){
+                    return view('listagemJogadores')->with(['jogadoresSeparados' => $jogadoreSeparados, 'notificacoes' => $notificacoes, 'req' => $request->racha_id_secreto]);
+                }
+            }
+            else{
+                return view('listagemJogadores')->with(['jogadoresSeparados' => $jogadoreSeparados, 'notificacoes' => $notificacoes, 'req' => $request->racha_id_secreto]);
+                
+            }
+    }
 
-        return view('listagemJogadores')->with(['jogadoresSeparados' => $jogadoreSeparados, 'notificacoes' => $notificacoes]);
+    public function alterarDiarista(Request $request){
+        $consultaRacha = DB::table('conta_racha')->where('usuario_id', $request->jogador_id)->where('racha_id', $request->racha_id)->first();
+        if($consultaRacha->mensalista == 0){
+            Conta_racha::where('usuario_id', $request->jogador_id)->where('racha_id', $request->racha_id)->update(['mensalista' => 1]);
+            return $this->listagemJogadores($request);
+
+
+        }
+        elseif($consultaRacha->mensalista == 1){
+            Conta_racha::where('usuario_id', $request->jogador_id)->where('racha_id', $request->racha_id)->update(['mensalista' => 0]);
+            return $this->listagemJogadores($request);
+
+
+        }
     }
 }

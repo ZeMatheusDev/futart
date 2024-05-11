@@ -10,7 +10,7 @@
 
     <div id="links">
         <a href="/criarConta">Criar Conta</a>
-        <a href="/logar">Logar</a>
+        <a href="/logar">Login</a>
     </div>
 @endif
 @if(session('logado') == true)
