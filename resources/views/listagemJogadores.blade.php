@@ -48,6 +48,8 @@
 
 
         <a href="/">Home</a>
+        <a href="/listagem">Listagem de Rachas</a>
+        <a href="">Rachas em andamento</a>
         <a href="/cadastrar">Cadastrar Racha</a>
         <button type="submit">Logout</button>
     </form></div>
@@ -70,7 +72,7 @@
 
 <div class="container">
     @foreach ($jogadoresSeparados as $jogador)
-        <div class="detalhes">
+        <div class="detalhes" style="@if($jogador->donoDoRacha) height: 450px; width: 450px; @endif">
             <img src="../fotos/{{basename($jogador->foto)}}" alt="Sua Imagem"><br>
             <p> {{$jogador->nome}} </p>
             <p>Posição: {{$jogador->posicao}}</p>
@@ -86,6 +88,23 @@
                     <input type="hidden" name="racha_id_secreto" value="{{$req}}">
                     <button class="btn btn-primary">Alterar para diarista</button>
                 </form>
+                <br>
+                @if($jogador->usuario_id != session()->all()['id'])
+                <form action="{{ asset('removerJogador') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="jogador_id" value="{{ $jogador->usuario_id }}">
+                    <input type="hidden" name="racha_id" value="{{ $jogador->racha_id }}">
+                    <input type="hidden" name="alterado" value="mensalista">
+                    <input type="hidden" name="racha_id_secreto" value="{{$req}}">
+                    <button class="btn btn-danger" type="submit">Remover jogador</button>
+                </form>
+                @endif
+                @if($jogador->usuario_id == session()->all()['id'])
+                <br><br>
+                @endif
+
+                <br>
+
             @endif
             @endif
 
@@ -101,9 +120,25 @@
                 <input type="hidden" name="racha_id_secreto" value="{{$req}}">
                 <button class="btn btn-primary" type="submit">Alterar para Mensalista</button>
             </form>
+            <br>
+            @if($jogador->usuario_id == session()->all()['id'])
+            <br><br>
             @endif
+            @if($jogador->usuario_id != session()->all()['id'])
+
+            <form action="{{ asset('removerJogador') }}" method="POST">
+                @csrf
+                <input type="hidden" name="jogador_id" value="{{ $jogador->usuario_id }}">
+                <input type="hidden" name="racha_id" value="{{ $jogador->racha_id }}">
+                <input type="hidden" name="alterado" value="mensalista">
+                <input type="hidden" name="racha_id_secreto" value="{{$req}}">
+                <button class="btn btn-danger" type="submit">Remover jogador</button>
+            </form>
             @endif
             <br>
+
+            @endif
+            @endif
         <form action="{{asset('listagemJogadores')}}" class="btn btn-success">Detalhes</form>
 
         </div>

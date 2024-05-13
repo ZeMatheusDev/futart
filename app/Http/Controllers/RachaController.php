@@ -177,33 +177,45 @@ class RachaController extends Controller
         ->where('racha_token', '=', $request->rachaToken)
         ->join('conta', 'conta.id', '=', 'racha.usuario_id')
         ->get();
-        if($verificarRachaDono[0]->email != $request->email){
-            if($verificacao->isEmpty() == false){
-                $verificarSolicitacoes = DB::table('convite')
-                ->where('convidado_id', '=', $verificacao[0]->id)
-                ->get();
-                if($verificarSolicitacoes->isEmpty()){
-                    $rachaId = DB::table('racha')
-                    ->where('racha_token', '=', $request->rachaToken)
-                    ->select('id', 'usuario_id')
+        $verificarRacha = DB::table('racha')
+        ->where('racha_token', '=', $request->rachaToken)
+        ->first();
+        $verificarSeJaEstaNoRacha = DB::table('conta_racha')
+        ->where('racha_id', '=', $verificarRacha->id)
+        ->where('usuario_id', '=', $verificacao[0]->id)
+        ->first();
+        if(isset($verificarSeJaEstaNoRacha)){
+            return redirect()->back()->with('error', 'Esse jogador já está no racha!');
+        }
+        else{
+            if($verificarRachaDono[0]->email != $request->email){
+                if($verificacao->isEmpty() == false){
+                    $verificarSolicitacoes = DB::table('convite')
+                    ->where('convidado_id', '=', $verificacao[0]->id)
                     ->get();
-                    $convite = new Convite();
-                    $convite->racha_id = $rachaId[0]->id;
-                    $convite->dono_id = $rachaId[0]->usuario_id;
-                    $convite->convidado_id = $verificacao[0]->id;
-                    $convite->save();
-                    return redirect()->back()->with('success', 'Solicitação enviada com sucesso para o ' . $verificacao[0]->nome. '!');
+                    if($verificarSolicitacoes->isEmpty()){
+                        $rachaId = DB::table('racha')
+                        ->where('racha_token', '=', $request->rachaToken)
+                        ->select('id', 'usuario_id')
+                        ->get();
+                        $convite = new Convite();
+                        $convite->racha_id = $rachaId[0]->id;
+                        $convite->dono_id = $rachaId[0]->usuario_id;
+                        $convite->convidado_id = $verificacao[0]->id;
+                        $convite->save();
+                        return redirect()->back()->with('success', 'Solicitação enviada com sucesso para o ' . $verificacao[0]->nome. '!');
+                    }
+                    else{
+                        return redirect()->back()->with('error', 'Esse usuário ja foi convidado para o racha!');
+                    }
                 }
                 else{
-                    return redirect()->back()->with('error', 'Esse usuário ja foi convidado para o racha!');
+                    return redirect()->back()->with('error', 'Email não encontrado no banco de dados!');
                 }
             }
             else{
-                return redirect()->back()->with('error', 'Email não encontrado no banco de dados!');
+                return redirect()->back()->with('error', 'O dono do racha não pode ser convidado!');
             }
-        }
-        else{
-            return redirect()->back()->with('error', 'O dono do racha não pode ser convidado!');
         }
 
     }
@@ -319,9 +331,8 @@ class RachaController extends Controller
                 $racha->hora_do_racha = $request->hora_inicio;
                 $racha->final_do_racha = $request->hora_fim;
                 $racha->quantidade_maxima_jogo = $request->quantidade_maxima_jogo;
+                $racha->ativo = 1;
                 $racha->usuario_id = session()->all()['id'];
-                $racha->created_at = now();
-                $racha->updated_at = now();
                 $racha->save();
                 $contaRacha = new Conta_racha();
                 $contaRacha->usuario_id = session()->all()['id']; 
@@ -360,8 +371,10 @@ class RachaController extends Controller
             $racha->racha_token = $token;
             $racha->quantidade_maxima_jogo = $request->quantidade_maxima_jogo;  
             $racha->usuario_id = session()->all()['id'];
+            $racha->ativo = 1;
             $racha->created_at = now();
             $racha->updated_at = now();
+            
             $racha->save();
             $racha->refresh();
             $contaRacha = new Conta_racha();
@@ -752,6 +765,8 @@ class RachaController extends Controller
                                 }
                             }
                             else{
+
+
                                 return view('listagemJogadores')->with(['jogadoresSeparados' => $jogadoreSeparados, 'notificacoes' => $notificacoes, 'req' => $request->racha_id_secreto]);
                                 
                             }
@@ -787,5 +802,79 @@ class RachaController extends Controller
 
 
         }
+    }
+
+    public function removerJogador(Request $request){
+        Conta_racha::where('usuario_id', $request->jogador_id)
+        ->where('racha_id', $request->racha_id)
+        ->delete();
+        $verificarQuantidade = DB::table('racha')->where('id', $request->racha_id_secreto)->first();
+        Racha::where('id', $request->racha_id_secreto)->update(['quantidade' => $verificarQuantidade->quantidade - 1]);
+        return $this->listagemJogadores($request);
+    }
+
+    public function sairDoRacha(Request $request){
+        if($request->usuario_id != session()->all()['id']){
+            $verificarFila = DB::table('fila_racha')->where('jogador_id', session()->all()['id'])->where('racha_id', $request->racha_id_secreto)->first();
+            if(isset($verificarFila)){
+                Fila_racha::where('jogador_id', session()->all()['id'])->where('racha_id', $request->racha_id_secreto)->delete();
+            }
+            Conta_racha::where('usuario_id', session()->all()['id'])
+            ->where('racha_id', $request->racha_id_secreto)
+            ->delete();
+            $verificarQuantidade = DB::table('racha')->where('id', $request->racha_id_secreto)->first();
+            Racha::where('id', $request->racha_id_secreto)->update(['quantidade' => $verificarQuantidade->quantidade - 1]);
+            $verificarQuantidade = DB::table('racha')->where('id', $request->racha_id_secreto)->first();
+            if($verificarQuantidade->quantidade != 0){
+                $verificarProximoAdm = DB::table('conta_racha')->where('racha_id', '=', $request->racha_id_secreto)->orderBy('created_at', 'asc')->first();
+                Racha::where('id', $request->racha_id_secreto)->update(['usuario_id' => $verificarProximoAdm->usuario_id]);
+                return redirect()->back()->with('success', 'Você saiu do racha');
+            }
+            elseif($verificarQuantidade->quantidade == 0){
+                Racha::where('id', $request->racha_id_secreto)->delete();
+            }
+        }
+        else{
+            $verificarFila = DB::table('fila_racha')->where('jogador_id', session()->all()['id'])->where('racha_id', $request->racha_id_secreto)->first();
+            if(isset($verificarFila)){
+                Fila_racha::where('jogador_id', session()->all()['id'])->where('racha_id', $request->racha_id_secreto)->delete();
+            }
+            Conta_racha::where('usuario_id', session()->all()['id'])
+            ->where('racha_id', $request->racha_id_secreto)
+            ->delete();
+            $verificarQuantidade = DB::table('racha')->where('id', $request->racha_id_secreto)->first();
+            Racha::where('id', $request->racha_id_secreto)->update(['quantidade' => $verificarQuantidade->quantidade - 1]);
+            $verificarQuantidade = DB::table('racha')->where('id', $request->racha_id_secreto)->first();
+            if($verificarQuantidade->quantidade != 0){
+                $verificarProximoAdm = DB::table('conta_racha')->where('racha_id', '=', $request->racha_id_secreto)->orderBy('created_at', 'asc')->first();
+                Racha::where('id', $request->racha_id_secreto)->update(['usuario_id' => $verificarProximoAdm->usuario_id]);
+                return redirect()->back()->with('success', 'Você saiu do racha');
+            }
+            elseif($verificarQuantidade->quantidade == 0){
+                $verificarJogadoresRachaDia = DB::table('jogadores_racha_dia')->where('racha_id', $request->racha_id_secreto)->get();
+                $verificarConvites = DB::table('convite')->where('racha_id', $request->racha_id_secreto)->get();
+                $verificarConfirmacoesRacha = DB::table('racha_confirmacao')->where('racha_id', $request->racha_id_secreto)->get();
+                if($verificarConfirmacoesRacha->isEmpty() == false){
+                    foreach($verificarConfirmacoesRacha as $verCon){
+                        RachaConfirmacao::where('id', $verCon->id)->delete();
+                    }
+                }
+                if($verificarConvites->isEmpty() == false){
+                    foreach($verificarConvites as $verConvite){
+                        Convite::where('id', $verConvite->id)->delete();
+                    }
+                }
+                if($verificarJogadoresRachaDia->isEmpty() == false){
+                    foreach($verificarJogadoresRachaDia as $verJogadores){
+                        Convite::where('id', $verJogadores->id)->delete();
+                    }
+                }
+                Racha::where('id', $request->racha_id_secreto)->delete();
+                return redirect()->back()->with('success', 'Você saiu do racha');
+ 
+            }
+
+        }
+
     }
 }

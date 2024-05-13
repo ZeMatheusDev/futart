@@ -57,6 +57,7 @@ class LoginController extends Controller
                                 $diaSemana = 'desconhecido';   
                             }
                         $diaDoRacha = $verificar->data_do_racha;
+
                         if($diaDoRacha == $diaSemana && $verificar->ativo == 1){
                             $verificacaoDosRachasHoje[] = $verificar;
                         }

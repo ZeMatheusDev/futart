@@ -53,6 +53,8 @@
         <img class="foto-circular" src="../fotos/{{session()->all()['foto']}}" alt="Sua Imagem">
         <button type="submit">Logout</button>
     <a href="/cadastrar">Cadastrar Racha</a>
+    <a href="">Rachas em andamento</a>
+
     <a href="/listagem">Listagem de Rachas</a>
     </form></div>
 @endif

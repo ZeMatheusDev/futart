@@ -13,6 +13,8 @@
         <a href="/">Home</a>
         <a href="/cadastrar">Cadastrar Racha</a>
         <a href="/listagem">Listagem de Rachas</a>
+        <a href="">Rachas em andamento</a>
+
         <button type="submit">Logout</button>
     </form>
 </div>

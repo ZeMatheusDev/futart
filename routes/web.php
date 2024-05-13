@@ -20,6 +20,8 @@ Route::middleware(['verificarAutenticacao'])->group(function () {
     Route::get('/listagem', [RachaController::class, 'listagem'])->name('listagem');
     Route::post('/listagemJogadores', [RachaController::class, 'listagemJogadores'])->name('listagemJogadores');
     Route::post('/confirmarRacha', [RachaController::class, 'confirmarRacha'])->name('confirmarRacha');
+    Route::post('/removerJogador', [RachaController::class, 'removerJogador'])->name('removerJogador');
+    Route::post('/sairDoRacha', [RachaController::class, 'sairDoRacha'])->name('sairDoRacha');
     Route::post('/cancelarRacha', [RachaController::class, 'cancelarRacha'])->name('cancelarRacha');
     Route::get('/cadastrar', [RachaController::class, 'cadastrar'])->name('cadastrar');
     Route::post('/aceitar', [RachaController::class, 'aceitar'])->name('aceitar');

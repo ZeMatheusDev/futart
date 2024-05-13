@@ -49,6 +49,7 @@
 
         <a href="/">Home</a>
         <a href="/cadastrar">Cadastrar Racha</a>
+        <a href="">Rachas em andamento</a>
         <button type="submit">Logout</button>
     </form></div>
 @endif
@@ -125,6 +126,13 @@
         <button id="listagemJogadores" type="submit">Lista dos jogadores do racha</button>
         </form>
         <br>
+        <form action="{{asset('sairDoRacha')}}" method="POST">
+            @csrf
+            <input type="hidden" name="racha_id_secreto" id="racha_id_secreto" value="{{$list->racha_id}}">
+            <input type="hidden" name="usuario_id" id="usuario_id" value="{{$list->usuario_id}}">
+            <button class="btn btn-danger" type="submit">Sair do racha</button>
+            <br><br>    
+            </form>
         @if (isset($list->passouDaHora))
         @if ($list->passouDaHora == false)
         @if (isset($list->confirmar))

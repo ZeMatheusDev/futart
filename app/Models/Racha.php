@@ -21,6 +21,7 @@ class Racha extends Model
         'racha_token',
         'quantidade_maxima_jogo',
         'usuario_id',
+        'ativo',
         'created_at',
         'updated_at',
     ];

@@ -47,6 +47,8 @@
         <img class="foto-circular" src="../fotos/{{session()->all()['foto']}}" alt="Sua Imagem">
     <a href="/">Home</a>
     <a href="/listagem">Listagem de Rachas</a>
+    <a href="">Rachas em andamento</a>
+
     <button type="submit">Logout</button>
 
     </form></div>
