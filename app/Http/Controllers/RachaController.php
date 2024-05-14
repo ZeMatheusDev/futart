@@ -7,6 +7,7 @@ use App\Models\Convite;
 use App\Models\Fila_racha;
 use App\Models\Jogadores_racha_dia;
 use App\Models\RachaConfirmacao;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -876,5 +877,77 @@ class RachaController extends Controller
 
         }
 
+    }
+    
+    public function listagemRachasAndamento(){
+        $notificacoes = DB::table('convite')
+        ->where('convidado_id', '=', session()->all()['id'])
+        ->join('conta', 'conta.id', '=', 'dono_id')
+        ->join('racha', 'racha.id', '=', 'racha_id')
+        ->get();
+        $hoje = date('N');
+        switch($hoje){
+            case 1:
+                $diaHoje = 'segunda';
+                break;
+            case 2:
+                $diaHoje = 'terca';
+                break;
+            case 3:
+                $diaHoje = 'quarta';
+                break;
+            case 4:
+                $diaHoje = 'quinta';
+                break;
+            case 5:
+                $diaHoje = 'sexta';
+                break;
+            case 6:
+                $diaHoje = 'sabado';
+                break;
+            case 7:
+                $diaHoje = 'domingo';
+                break;
+            default:
+                $diaHoje = 'desconhecido';
+                break;
+        }
+        $horaAgora = now()->format('H:i:s.u');
+        $verificarHoraRacha = DB::table('conta_racha')->where('conta_racha.usuario_id', session()->all()['id'])
+        ->join('racha', 'racha.id', '=', 'conta_racha.racha_id')
+        ->get();
+        if($verificarHoraRacha->isEmpty() == false){
+            foreach($verificarHoraRacha as $verificar){
+
+                if($diaHoje == $verificar->data_do_racha){
+                    if($verificar->hora_do_racha < $horaAgora){
+                        $todosJogadoresDoRacha[] = DB::table('conta_racha')->where('racha_id', $verificar->racha_id)
+                        ->join('conta', 'conta.id', '=', 'conta_racha.usuario_id')
+                        ->join('racha', 'racha.id', '=', 'conta_racha.racha_id')->get();
+                        $diaHojeMes = Carbon::now()->format('d/m/Y');
+                        $verificarQuantidadeJogadoresConfirmados = DB::table('jogadores_racha_dia')->where('jogadores_racha_dia.racha_id', $verificar->racha_id)
+                        ->where('racha_dia', $diaHojeMes)->get();
+                        if(isset($verificarQuantidadeJogadoresConfirmados)){
+                            $quantidadeConfirmados = count($verificarQuantidadeJogadoresConfirmados);
+                        }
+                        else{
+                            $quantidadeConfirmados = 0;
+                        }
+                    }
+                    else{
+                        dd($verificar);
+                    }
+                }
+                else{
+     
+                }
+            }
+
+            return view('/listagemRachasAndamento')->with(['todosJogadores' => $todosJogadoresDoRacha, 'notificacoes' => $notificacoes, 'quantidadeConfirmados' => $quantidadeConfirmados]);
+
+        }
+        
+
+        return view('/listagemRachasAndamento')->with('notificacoes', $notificacoes);
     }
 }

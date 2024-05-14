@@ -24,6 +24,7 @@ Route::middleware(['verificarAutenticacao'])->group(function () {
     Route::post('/sairDoRacha', [RachaController::class, 'sairDoRacha'])->name('sairDoRacha');
     Route::post('/cancelarRacha', [RachaController::class, 'cancelarRacha'])->name('cancelarRacha');
     Route::get('/cadastrar', [RachaController::class, 'cadastrar'])->name('cadastrar');
+    Route::get('/listagemRachasAndamento', [RachaController::class, 'listagemRachasAndamento'])->name('listagemRachasAndamento');
     Route::post('/aceitar', [RachaController::class, 'aceitar'])->name('aceitar');
     Route::post('/confirmarPresenca', [RachaController::class, 'confirmarPresenca'])->name('confirmarPresenca');
     Route::post('/cancelarPresenca', [RachaController::class, 'cancelarPresenca'])->name('cancelarPresenca');
