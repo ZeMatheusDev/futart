@@ -11,7 +11,83 @@
     width: 800px;
     height: 500px;
     margin-left: 80px;
+    display: inline-block;   
+    overflow-y: auto;
+}
+
+#nomeDoRacha{
+    font-size: 20px;
+    font-family:Arial, Helvetica, sans-serif;
+    margin-left: 130px;
+    display: flex;
+}
+
+#jogador{
     display: inline-block;
+    height: 250px;
+    width: 250px;
+    background-color: rgb(255, 255, 255, 0.9);
+    border-radius: 20px;
+    margin-left: 20px;
+}
+
+#botao{
+    display: flex;
+    margin: 0 auto;
+    font-size: 14px;
+    height: 28px;
+    background-color: red;
+    border-color: red;
+    color: white;
+}
+
+#botao:hover{
+    border-color: black;
+    background-color: black;
+    transition: 500ms;
+}
+
+#nomeJogador{
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+#posicaoJogador{
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+#jogador img{
+    margin-top: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    margin: 0 auto;
+    align-self: flex-start; /* Alinha a foto no topo do contêiner */
+}
+
+#tituloJogadores{
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+}
+
+#quantidade{
+    text-align: center;
+    font-size: 16px;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+#cronometro{
+    text-align: left;
+    display: inline-flex;
+    font-size: 16px;
+    font-weight: bold;
 }
 
 #myAudio{

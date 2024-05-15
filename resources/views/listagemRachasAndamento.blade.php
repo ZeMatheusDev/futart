@@ -68,17 +68,75 @@
     Seu navegador não suporta o elemento de áudio.
 </audio>
 @if(empty($todosJogadores) == false)
-    @foreach($todosJogadores as $jogador)
-    <div id="tela">
-        {{$jogador[0]->nome_do_racha}}
-        @foreach($jogador as $jog)
-
-        @endforeach
+@foreach($todosJogadores as $index => $jogador)
+<div id="tela">
+    <div id="cronometro"><p>O racha acaba em:</p>&nbsp<p id="cronometro_{{$index}}">{{$jogador[0]->horaFormatada}}</p>
+    <p id="nomeDoRacha">Racha: <strong style="text-transform:uppercase;">{{$jogador[0]->nome_do_racha}}</strong></p>
     </div>
+    <div id="tituloJogadores">Jogadores:</div>
+    <br>
+        @foreach($jogador as $jog)
+            <div id="jogador"><img src="../fotos/{{basename($jog->foto)}}" alt="Sua Imagem"><br>      
+                <div id="nomeJogador">{{$jog->nome}}</div>
+                <br>
+                <div id="posicaoJogador">{{$jog->posicao}}</div>
+                <br>
+                <form action="">
+                    <button id="botao">Remover jogador</button>
+                </form>
+            </div>
+        @endforeach
+    <p id="quantidade">{{$jogador[0]->quantidade}} jogadores de {{$jogador[0]->quantidade_maxima_jogo}}</p> 
 
+    </div>
+    
     @endforeach
 @endif
 <script>
+
+function atualizarCronometros() {
+    @foreach($todosJogadores as $index => $jogador)
+        var cronometroElement = document.getElementById('cronometro_{{$index}}');
+        var tempoAtual = cronometroElement.innerText;
+
+        var partesTempo = tempoAtual.split(':');
+        var horas = parseInt(partesTempo[0]);
+
+        var minutos = parseInt(partesTempo[1]);
+ 
+        var segundos = parseInt(partesTempo[2]);
+
+        segundos--;
+        if (horas == 0 && minutos == 0 && segundos == 0) {
+            window.location.reload(true);
+        }
+        else{
+            if (segundos < 0) {
+            segundos = 59;
+            minutos--;
+            if (minutos < 0) {
+                minutos = 59;
+                horas--;
+
+            }
+        }
+        }
+
+
+        var tempoRestante = (horas < 10 ? '0' : '') + horas + ':' +
+                            (minutos < 10 ? '0' : '') + minutos + ':' +
+                            (segundos < 10 ? '0' : '') + segundos;
+
+
+        cronometroElement.innerText = tempoRestante ;
+    @endforeach
+
+
+    setTimeout(atualizarCronometros, 1000);
+}
+
+atualizarCronometros();
+
                 document.addEventListener('DOMContentLoaded', function () {
                     if(document.querySelector('.notificacao')){
                         var notificacaoWrapper = document.querySelector('.notificacao');

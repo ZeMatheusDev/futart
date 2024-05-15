@@ -916,31 +916,64 @@ class RachaController extends Controller
         $verificarHoraRacha = DB::table('conta_racha')->where('conta_racha.usuario_id', session()->all()['id'])
         ->join('racha', 'racha.id', '=', 'conta_racha.racha_id')
         ->get();
+        $diaHojeMes = Carbon::now()->format('d/m/Y');
+
         if($verificarHoraRacha->isEmpty() == false){
             foreach($verificarHoraRacha as $verificar){
+                $verificarConfirmacao = DB::table('racha_confirmacao')->where('racha_id', $verificar->racha_id)->where('confirmacao', 1)->where('data_dia_racha', $diaHojeMes)->first();
+                if(isset($verificarConfirmacao)){
+                    if($diaHoje == $verificar->data_do_racha){
+                        if($verificar->hora_do_racha < $horaAgora){
+                            if($verificar->final_do_racha > $horaAgora){
+                                $todosJogadoresDoRacha[] = DB::table('conta_racha')->where('racha_id', $verificar->racha_id)
+                                ->join('conta', 'conta.id', '=', 'conta_racha.usuario_id')
+                                ->join('racha', 'racha.id', '=', 'conta_racha.racha_id')->get();
+                                foreach($todosJogadoresDoRacha as $jogador){
+                                    foreach($jogador as $jog){
+                                        $final = strtotime($jog->final_do_racha);
+                                        $horaAgoraAtual = strtotime($horaAgora);
+                                        $diferenca = $final - $horaAgoraAtual;
+                                        $horas = gmdate('H', $diferenca);
+                                        $minutos = gmdate('i', $diferenca);
+                                        $segundos = gmdate('s', $diferenca);
+                                        $horaFormatada = ($horas.':'.$minutos.':'.$segundos);
+                                        $jog->horaFormatada = $horaFormatada;
+                                    }
+                                }
 
-                if($diaHoje == $verificar->data_do_racha){
-                    if($verificar->hora_do_racha < $horaAgora){
-                        $todosJogadoresDoRacha[] = DB::table('conta_racha')->where('racha_id', $verificar->racha_id)
-                        ->join('conta', 'conta.id', '=', 'conta_racha.usuario_id')
-                        ->join('racha', 'racha.id', '=', 'conta_racha.racha_id')->get();
-                        $diaHojeMes = Carbon::now()->format('d/m/Y');
-                        $verificarQuantidadeJogadoresConfirmados = DB::table('jogadores_racha_dia')->where('jogadores_racha_dia.racha_id', $verificar->racha_id)
-                        ->where('racha_dia', $diaHojeMes)->get();
-                        if(isset($verificarQuantidadeJogadoresConfirmados)){
-                            $quantidadeConfirmados = count($verificarQuantidadeJogadoresConfirmados);
+                                $verificarQuantidadeJogadoresConfirmados = DB::table('jogadores_racha_dia')->where('jogadores_racha_dia.racha_id', $verificar->racha_id)
+                                ->where('racha_dia', $diaHojeMes)->get();
+                                if(isset($verificarQuantidadeJogadoresConfirmados)){
+                                    $quantidadeConfirmados = count($verificarQuantidadeJogadoresConfirmados);
+                                }
+                                else{
+                                    $quantidadeConfirmados = 0;
+                                }
+                            }
+                            else{
+                                if(!isset($todosJogadoresDoRacha)){
+                                    $todosJogadoresDoRacha = new Collection();
+                                    $quantidadeConfirmados = 0; 
+                                }
+                            }
+                            
                         }
                         else{
-                            $quantidadeConfirmados = 0;
+                            if(!isset($todosJogadoresDoRacha)){
+                                $todosJogadoresDoRacha = new Collection();
+                                $quantidadeConfirmados = 0; 
+                            }
                         }
+                        
                     }
                     else{
-                        dd($verificar);
+                        if(!isset($todosJogadoresDoRacha)){
+                            $todosJogadoresDoRacha = new Collection();
+                            $quantidadeConfirmados = 0; 
+                        }
                     }
                 }
-                else{
-     
-                }
+
             }
 
             return view('/listagemRachasAndamento')->with(['todosJogadores' => $todosJogadoresDoRacha, 'notificacoes' => $notificacoes, 'quantidadeConfirmados' => $quantidadeConfirmados]);
